@@ -1,0 +1,133 @@
+import { useFrame, useThree } from "@react-three/fiber";
+//import { useRef } from "react";
+import { Vector3 } from "three";
+
+import useKeyboard from "../hooks/useKeyboard";
+import { useRef } from "react";
+
+const CAMERA_RADIUS = 0.5;
+
+const ACCELERATION = 55; 
+const FRICTION = 3;
+const MAX_SPEED = 5;
+
+interface Props {
+  position?: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  clampOffset?: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  width?: number;
+  height?: number;
+}
+
+export default function FPSCamera({
+  position = { x: 0, y: 0, z: 0 },
+  clampOffset = { x: 0, y: 0, z: 0 },
+  width = 1,
+  height = 1,
+}: Props) {
+  const halfWidth = width / 2;
+  const halfHeight = height / 2;
+
+  const { camera } = useThree();
+  const velocity = useRef(new Vector3());
+  const direction = useRef(new Vector3());
+  const keys = useKeyboard();
+
+  camera.position.x = position.x;
+  camera.position.y = position.x;
+  camera.position.z = position.z;
+
+  /* useFrame((_, delta) => {
+    const speed = 10;
+
+    let moveX = 0;
+    let moveZ = 0;
+
+    if (keys["KeyW"]) moveZ += MOVE_SPEED;
+    if (keys["KeyS"]) moveZ -= MOVE_SPEED;
+    if (keys["KeyA"]) moveX -= MOVE_SPEED;
+    if (keys["KeyD"]) moveX += MOVE_SPEED;
+
+    const dir = new Vector3();
+    camera.getWorldDirection(dir);
+    dir.y = 0;
+    dir.normalize();
+
+    const right = new Vector3().crossVectors(dir, camera.up).normalize();
+
+    camera.position.addScaledVector(dir, moveZ * speed * delta);
+    camera.position.addScaledVector(right, moveX * speed * delta);
+
+    // clamp
+    camera.position.x = Math.max(
+      -halfWidth + clampOffset.x + CAMERA_RADIUS,
+      Math.min(halfWidth + clampOffset.x - CAMERA_RADIUS, camera.position.x),
+    );
+    camera.position.z = Math.max(
+      -halfHeight + clampOffset.z + CAMERA_RADIUS,
+      Math.min(halfHeight + clampOffset.z - CAMERA_RADIUS, camera.position.z),
+    );
+
+    camera.position.y = position.y;
+  }); */
+
+  useFrame((_, delta) => {
+    direction.current.set(0, 0, 0);
+
+    if (keys["KeyW"]) direction.current.z += 1;
+    if (keys["KeyS"]) direction.current.z -= 1;
+    if (keys["KeyA"]) direction.current.x -= 1;
+    if (keys["KeyD"]) direction.current.x += 1;
+
+    direction.current.normalize();
+
+    const forward = new Vector3();
+    camera.getWorldDirection(forward);
+    forward.y = 0;
+    forward.normalize();
+
+    const right = new Vector3().crossVectors(forward, camera.up).normalize();
+
+    // apply acceleration
+    velocity.current.addScaledVector(
+      forward,
+      direction.current.z * ACCELERATION * delta,
+    );
+    velocity.current.addScaledVector(
+      right,
+      direction.current.x * ACCELERATION * delta,
+    );
+
+    // clamp max speed
+    if (velocity.current.length() > MAX_SPEED) {
+      velocity.current.setLength(MAX_SPEED);
+    }
+
+    // apply friction
+    velocity.current.multiplyScalar(1 - FRICTION * delta);
+
+    // move camera
+    camera.position.addScaledVector(velocity.current, delta);
+
+    // bounds
+    camera.position.x = Math.max(
+      -halfWidth + clampOffset.x + CAMERA_RADIUS,
+      Math.min(halfWidth + clampOffset.x - CAMERA_RADIUS, camera.position.x),
+    );
+    camera.position.z = Math.max(
+      -halfHeight + clampOffset.z + CAMERA_RADIUS,
+      Math.min(halfHeight + clampOffset.z - CAMERA_RADIUS, camera.position.z),
+    );
+
+    camera.position.y = position.y;
+  });
+
+  return <></>;
+}

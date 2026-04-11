@@ -4,9 +4,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <div id="canvas-container">
-        <Museum />
-      </div>
+      <Museum />
     </>
   );
 }

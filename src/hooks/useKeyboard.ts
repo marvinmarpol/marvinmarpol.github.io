@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
 export default function useKeyboard() {
-  const keyMap = useRef({});
+  const keyMap = useRef<any>({});
 
   useEffect(() => {
-    const onDocumentKey = (e) => {
+    const onDocumentKey = (e: any) => {
       keyMap.current[e.code] = e.type === "keydown";
     };
     document.addEventListener("keydown", onDocumentKey);
