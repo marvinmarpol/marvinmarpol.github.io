@@ -1,7 +1,9 @@
+import { Select } from "@react-three/postprocessing";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Mesh } from "three";
 import * as THREE from "three";
+import { Html } from "@react-three/drei";
 
 export default function Box(props: any) {
   const ref = useRef<Mesh>(null);
@@ -23,16 +25,23 @@ export default function Box(props: any) {
   });
 
   return (
-    <mesh
-      {...props}
-      ref={ref}
-      scale={hovered ? [1.1, 1.1, 1.1] : [1, 1, 1]}
-      onPointerDown={() => setRotate(!rotate)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-      material={material}
-    >
-      <boxGeometry />
-    </mesh>
+    <Select enabled={hovered}>
+      <mesh
+        {...props}
+        ref={ref}
+        scale={hovered ? [1.1, 1.1, 1.1] : [1, 1, 1]}
+        onPointerDown={() => setRotate(!rotate)}
+        onPointerOver={() => setHover(true)}
+        onPointerOut={() => setHover(false)}
+        material={material}
+      >
+        <boxGeometry />
+        <Html className="content" position={[0, 0, 0.51]} transform occlude>
+          <div className="wrapper" onPointerDown={(e) => e.stopPropagation()}>
+            Test
+          </div>
+        </Html>
+      </mesh>
+    </Select>
   );
 }

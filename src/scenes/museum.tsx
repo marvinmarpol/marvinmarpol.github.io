@@ -6,6 +6,11 @@ import Floor from "../objects/floor";
 import Box from "../objects/box";
 import Room from "../objects/room";
 import LightBulb from "../lighting/LightBulb";
+import {
+  EffectComposer,
+  Outline,
+  Selection,
+} from "@react-three/postprocessing";
 
 interface Props {
   width?: number;
@@ -41,7 +46,7 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
           color="#f0f0f0"
         />
 
-        <Box />
+        <Box position={[2, 2, 2]} />
       </>
     );
   };
@@ -71,9 +76,18 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
           radius={0.1}
           color={"#f0f0f0"}
         />
-        
 
-        <Scene />
+        <Selection>
+          <EffectComposer multisampling={8} autoClear={false}>
+            <Outline
+              blur
+              visibleEdgeColor={0xffffff}
+              edgeStrength={100}
+              width={1000}
+            />
+          </EffectComposer>
+          <Scene />
+        </Selection>
 
         <FPSCamera
           width={width}

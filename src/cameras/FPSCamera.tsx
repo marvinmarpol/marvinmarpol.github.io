@@ -1,9 +1,8 @@
 import { useFrame, useThree } from "@react-three/fiber";
-//import { useRef } from "react";
+import { useRef } from "react";
 import { Vector3 } from "three";
 
 import useKeyboard from "../hooks/useKeyboard";
-import { useRef } from "react";
 
 const CAMERA_RADIUS = 0.5;
 
