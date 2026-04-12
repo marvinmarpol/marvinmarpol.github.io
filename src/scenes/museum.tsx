@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { PointerLockControls } from "@react-three/drei";
+import { Html, PointerLockControls } from "@react-three/drei";
 
 import FPSCamera from "../cameras/FPSCamera";
 import Floor from "../objects/floor";
@@ -11,6 +11,7 @@ import {
   Outline,
   Selection,
 } from "@react-three/postprocessing";
+import Painting from "../objects/painting";
 
 interface Props {
   width?: number;
@@ -47,6 +48,11 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
         />
 
         <Box position={[2, 2, 2]} />
+        <Painting position={[0, 2.5, -height / 2 + 0.01]} size={[6, 4]}>
+          <Html className="content" position={[0, 0, 0.01]} transform occlude>
+            Test2
+          </Html>
+        </Painting>
       </>
     );
   };
