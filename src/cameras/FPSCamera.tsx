@@ -7,7 +7,7 @@ import { useRef } from "react";
 
 const CAMERA_RADIUS = 0.5;
 
-const ACCELERATION = 55; 
+const ACCELERATION = 34; 
 const FRICTION = 3;
 const MAX_SPEED = 5;
 
@@ -43,40 +43,6 @@ export default function FPSCamera({
   camera.position.x = position.x;
   camera.position.y = position.x;
   camera.position.z = position.z;
-
-  /* useFrame((_, delta) => {
-    const speed = 10;
-
-    let moveX = 0;
-    let moveZ = 0;
-
-    if (keys["KeyW"]) moveZ += MOVE_SPEED;
-    if (keys["KeyS"]) moveZ -= MOVE_SPEED;
-    if (keys["KeyA"]) moveX -= MOVE_SPEED;
-    if (keys["KeyD"]) moveX += MOVE_SPEED;
-
-    const dir = new Vector3();
-    camera.getWorldDirection(dir);
-    dir.y = 0;
-    dir.normalize();
-
-    const right = new Vector3().crossVectors(dir, camera.up).normalize();
-
-    camera.position.addScaledVector(dir, moveZ * speed * delta);
-    camera.position.addScaledVector(right, moveX * speed * delta);
-
-    // clamp
-    camera.position.x = Math.max(
-      -halfWidth + clampOffset.x + CAMERA_RADIUS,
-      Math.min(halfWidth + clampOffset.x - CAMERA_RADIUS, camera.position.x),
-    );
-    camera.position.z = Math.max(
-      -halfHeight + clampOffset.z + CAMERA_RADIUS,
-      Math.min(halfHeight + clampOffset.z - CAMERA_RADIUS, camera.position.z),
-    );
-
-    camera.position.y = position.y;
-  }); */
 
   useFrame((_, delta) => {
     direction.current.set(0, 0, 0);

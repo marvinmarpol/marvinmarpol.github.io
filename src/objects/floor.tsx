@@ -18,7 +18,7 @@ export default function Floor({
       receiveShadow={receiveShadow}
     >
       <planeGeometry args={size} />
-      <meshStandardMaterial color={color} roughness={0.5} metalness={0.5} />
+      <meshStandardMaterial color={color} roughness={0.1} metalness={0.5} />
     </mesh>
   );
 }

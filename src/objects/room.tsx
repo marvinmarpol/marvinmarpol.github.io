@@ -52,15 +52,15 @@ export default function Room({
       <mesh
         rotation-x={Math.PI / 2}
         position={wallAbovePosition}
-        receiveShadow={false}
+        receiveShadow={true}
       >
         <planeGeometry args={[size.width, size.height]} />
-        <meshStandardMaterial color={color} roughness={0.5} metalness={0.5} />
+        <meshStandardMaterial color={color} roughness={1} metalness={0.0} />
       </mesh>
 
       <mesh position={wallNorthPosition} receiveShadow={receiveShadow}>
         <planeGeometry args={[size.width, size.depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0} />
       </mesh>
 
       <mesh
@@ -69,7 +69,7 @@ export default function Room({
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[size.width, size.depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} roughness={0.4} metalness={0.0} />
       </mesh>
 
       <mesh
@@ -78,7 +78,7 @@ export default function Room({
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[size.width + size.height, size.depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0}/>
       </mesh>
 
       <mesh
@@ -87,7 +87,7 @@ export default function Room({
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[size.width + size.height, size.depth]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0}/>
       </mesh>
     </>
   );
