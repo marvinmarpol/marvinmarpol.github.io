@@ -13,7 +13,7 @@ interface Props {
   depth?: number;
 }
 
-export default function Museum({ width = 20, height = 36, depth = 12 }: Props) {
+export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
   const cameraPosition = {
     x: 0,
     y: 1.78,
@@ -33,11 +33,12 @@ export default function Museum({ width = 20, height = 36, depth = 12 }: Props) {
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
           size={[width, height]}
           receiveShadow={true}
+          color={"#050505"}
         />
         <Room
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
           size={{ width, height, depth }}
-          color="#f4f1eb"
+          color="#f0f0f0"
         />
 
         <Box />
@@ -48,22 +49,29 @@ export default function Museum({ width = 20, height = 36, depth = 12 }: Props) {
   return (
     <div id="canvas-container">
       <Canvas>
-        {/* Soft global light */}
-        <ambientLight intensity={0.3} />
+        <ambientLight intensity={1} />
 
-        {/* Main gallery spotlight */}
-        <directionalLight
-          position={[0, 15, -width]}
-          intensity={1.5}
-          castShadow
-          shadow-mapSize={[2048, 2048]}
+        <LightBulb
+          intensity={89}
+          position={[0, depth / 2 - 1, height / 3]}
+          radius={0.1}
+          color={"#fffee0"}
         />
 
         <LightBulb
-          intensity={13}
+          intensity={89}
+          position={[0, depth / 2 - 1, -height / 3]}
+          radius={0.1}
+          color={"#fffee0"}
+        />
+
+        <LightBulb
+          intensity={89}
           position={[0, depth / 2 - 1, 0]}
           radius={0.1}
+          color={"#f0f0f0"}
         />
+        
 
         <Scene />
 
