@@ -1,17 +1,11 @@
 import { Canvas } from "@react-three/fiber";
-import { Html, PointerLockControls } from "@react-three/drei";
+import { PointerLockControls } from "@react-three/drei";
 
 import FPSCamera from "../cameras/FPSCamera";
 import Floor from "../objects/floor";
 import Box from "../objects/box";
 import Room from "../objects/room";
 import LightBulb from "../lighting/LightBulb";
-import {
-  EffectComposer,
-  Outline,
-  Selection,
-} from "@react-three/postprocessing";
-import Painting from "../objects/painting";
 
 interface Props {
   width?: number;
@@ -39,20 +33,20 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
           size={[width, height]}
           receiveShadow={true}
-          color={"#050505"}
+          color={"#C49A6C"}
+          tileTexture={{
+            path: "./textures/wood.jpeg",
+            repeatX: 32,
+            repeatY: 32,
+          }}
         />
         <Room
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
           size={{ width, height, depth }}
-          color="#f0f0f0"
+          color="#B7B0A4"
         />
 
         <Box position={[2, 2, 2]} />
-        <Painting position={[0, 2.5, -height / 2 + 0.01]} size={[6, 4]}>
-          <Html className="content" position={[0, 0, 0.01]} transform occlude>
-            Test2
-          </Html>
-        </Painting>
       </>
     );
   };
@@ -60,40 +54,23 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
   return (
     <div id="canvas-container">
       <Canvas>
-        <ambientLight intensity={1} />
+        <ambientLight intensity={1.5} />
 
         <LightBulb
-          intensity={89}
+          intensity={144}
           position={[0, depth / 2 - 1, height / 3]}
-          radius={0.1}
-          color={"#fffee0"}
-        />
-
-        <LightBulb
-          intensity={89}
-          position={[0, depth / 2 - 1, -height / 3]}
-          radius={0.1}
-          color={"#fffee0"}
-        />
-
-        <LightBulb
-          intensity={89}
-          position={[0, depth / 2 - 1, 0]}
           radius={0.1}
           color={"#f0f0f0"}
         />
 
-        <Selection>
-          <EffectComposer multisampling={8} autoClear={false}>
-            <Outline
-              blur
-              visibleEdgeColor={0xffffff}
-              edgeStrength={100}
-              width={1000}
-            />
-          </EffectComposer>
-          <Scene />
-        </Selection>
+        <LightBulb
+          intensity={144}
+          position={[0, depth / 2 - 1, -height / 3]}
+          radius={0.1}
+          color={"#f0f0f0"}
+        />
+
+        <Scene />
 
         <FPSCamera
           width={width}
