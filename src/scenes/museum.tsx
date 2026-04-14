@@ -6,6 +6,7 @@ import Floor from "../objects/floor";
 import Box from "../objects/box";
 import Room from "../objects/room";
 import LightBulb from "../lighting/LightBulb";
+import Painting from "../objects/painting";
 
 interface Props {
   width?: number;
@@ -33,12 +34,12 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
           size={[width, height]}
           receiveShadow={true}
-          color={"#C49A6C"}
-          tileTexture={{
+          color={"#050505"}
+          /* tileTexture={{
             path: "./textures/wood.jpeg",
             repeatX: 32,
             repeatY: 32,
-          }}
+          }} */
         />
         <Room
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
@@ -47,6 +48,10 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
         />
 
         <Box position={[2, 2, 2]} />
+        <Painting
+          imageUrl={"./paintings/summer.jpeg"}
+          position={[0, 2, -height / 2 + 0.01]}
+        />
       </>
     );
   };
@@ -57,14 +62,14 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
         <ambientLight intensity={1.5} />
 
         <LightBulb
-          intensity={144}
+          intensity={34}
           position={[0, depth / 2 - 1, height / 3]}
           radius={0.1}
           color={"#f0f0f0"}
         />
 
         <LightBulb
-          intensity={144}
+          intensity={34}
           position={[0, depth / 2 - 1, -height / 3]}
           radius={0.1}
           color={"#f0f0f0"}
