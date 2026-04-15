@@ -44,7 +44,7 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
         <Room
           position={[floorPosition.x, floorPosition.y, floorPosition.z]}
           size={{ width, height, depth }}
-          color="#B7B0A4"
+          color="#f0f0f0"
         />
 
         <Box position={[2, 2, 2]} />
@@ -58,20 +58,22 @@ export default function Museum({ width = 10, height = 10, depth = 10 }: Props) {
 
   return (
     <div id="canvas-container">
-      <Canvas>
-        <ambientLight intensity={1.5} />
+      <Canvas gl={{ toneMappingExposure: 2.5 }}>
+        <ambientLight intensity={0.2} />
 
-        <LightBulb
-          intensity={34}
+        {/* <LightBulb
+          intensity={21}
           position={[0, depth / 2 - 1, height / 3]}
           radius={0.1}
+          distance={21}
           color={"#f0f0f0"}
-        />
+        /> */}
 
         <LightBulb
           intensity={34}
-          position={[0, depth / 2 - 1, -height / 3]}
+          position={[0, depth / 2 - 1, 0]}
           radius={0.1}
+          distance={21}
           color={"#f0f0f0"}
         />
 
