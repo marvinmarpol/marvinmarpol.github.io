@@ -32,8 +32,8 @@ export default function Floor({
       <planeGeometry args={size} />
       <meshStandardMaterial
         color={color}
-        roughness={0.6}
-        metalness={0.1}
+        roughness={0.8}
+        metalness={0}
         map={texture}
       />
     </mesh>

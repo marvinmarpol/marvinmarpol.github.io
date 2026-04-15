@@ -47,6 +47,12 @@ export default function Room({
     position[2],
   ] as any;
 
+  const wallRoughness = 0.8;
+  const wallMetalness = 0.0;
+
+  const roofRoughness = 1;
+  const roofMetalness = 0.5;
+
   return (
     <>
       <mesh
@@ -55,12 +61,20 @@ export default function Room({
         receiveShadow={true}
       >
         <planeGeometry args={[size.width, size.height]} />
-        <meshStandardMaterial color={color} roughness={1} metalness={0.5} />
+        <meshStandardMaterial
+          color={color}
+          roughness={roofRoughness}
+          metalness={roofMetalness}
+        />
       </mesh>
 
       <mesh position={wallNorthPosition} receiveShadow={receiveShadow}>
         <planeGeometry args={[size.width, size.depth]} />
-        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0} />
+        <meshStandardMaterial
+          color={color}
+          roughness={wallRoughness}
+          metalness={wallMetalness}
+        />
       </mesh>
 
       <mesh
@@ -69,7 +83,11 @@ export default function Room({
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[size.width, size.depth]} />
-        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0} />
+        <meshStandardMaterial
+          color={color}
+          roughness={wallRoughness}
+          metalness={wallMetalness}
+        />
       </mesh>
 
       <mesh
@@ -78,7 +96,11 @@ export default function Room({
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[size.width + size.height, size.depth]} />
-        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0} />
+        <meshStandardMaterial
+          color={color}
+          roughness={wallRoughness}
+          metalness={wallMetalness}
+        />
       </mesh>
 
       <mesh
@@ -87,7 +109,11 @@ export default function Room({
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[size.width + size.height, size.depth]} />
-        <meshStandardMaterial color={color} roughness={0.8} metalness={0.0} />
+        <meshStandardMaterial
+          color={color}
+          roughness={wallRoughness}
+          metalness={wallMetalness}
+        />
       </mesh>
     </>
   );

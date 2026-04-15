@@ -1,8 +1,8 @@
-import { useFrame, useLoader } from "@react-three/fiber";
 import { useRef, useState } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 import { Mesh } from "three";
 import * as THREE from "three";
-import { Html } from "@react-three/drei";
 
 export default function Box(props: any) {
   const ref = useRef<Mesh>(null);
@@ -28,7 +28,6 @@ export default function Box(props: any) {
       {...props}
       ref={ref}
       scale={hovered ? [1.1, 1.1, 1.1] : [1, 1, 1]}
-      color={hovered && "red"}
       onPointerDown={() => setRotate(!rotate)}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}

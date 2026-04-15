@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <Museum width={20} height={36} depth={12} />
+      <Museum width={18} height={30} depth={10} />
     </>
   );
 }
