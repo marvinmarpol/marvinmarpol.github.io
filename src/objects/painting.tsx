@@ -1,5 +1,11 @@
 import { useRef, useEffect } from "react";
 import { useTexture } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+
+export type { PopupInfo } from "./Focusable";
+
+import type { PopupInfo } from "./Focusable";
 
 interface Props {
   position?: [number, number, number];
@@ -8,7 +14,14 @@ interface Props {
   imageUrl: string;
   withSpotlight?: boolean;
   withFrame?: boolean;
+  info?: PopupInfo;
+  onFocus?: (info: PopupInfo) => void;
+  onBlur?: () => void;
 }
+
+const _paintingPos = new THREE.Vector3();
+const _toP = new THREE.Vector3();
+const _camDir = new THREE.Vector3();
 
 export default function Painting({
   position = [0, 0, 0],
@@ -17,11 +30,18 @@ export default function Painting({
   imageUrl,
   withSpotlight = true,
   withFrame = true,
+  info,
+  onFocus,
+  onBlur,
 }: Props) {
+
+  const { camera } = useThree();
+  const groupRef = useRef<THREE.Group>(null);
   const lightRef = useRef<any>(null);
   const targetRef = useRef<any>(null);
   const frameThickness = 0.06;
   const texture = useTexture(imageUrl);
+  const focusedRef = useRef(false);
 
   useEffect(() => {
     if (lightRef.current && targetRef.current) {
@@ -29,9 +49,28 @@ export default function Painting({
     }
   }, []);
 
+  useFrame(() => {
+    if (!groupRef.current || !info) return;
+
+    groupRef.current.getWorldPosition(_paintingPos);
+    const distance = camera.position.distanceTo(_paintingPos);
+
+    let shouldFocus = false;
+    if (distance < 4) {
+      _toP.copy(_paintingPos).sub(camera.position).normalize();
+      camera.getWorldDirection(_camDir);
+      shouldFocus = _toP.dot(_camDir) > 0.75;
+    }
+
+    if (shouldFocus !== focusedRef.current) {
+      focusedRef.current = shouldFocus;
+      if (shouldFocus) onFocus?.(info);
+      else onBlur?.();
+    }
+  });
+
   return (
-    <group position={position} rotation={rotation}>
-      {/* Frame backing */}
+    <group ref={groupRef} position={position} rotation={rotation}>
       {withFrame && (
         <mesh position={[0, 0, -0.012]}>
           <planeGeometry
@@ -44,16 +83,13 @@ export default function Painting({
         </mesh>
       )}
 
-      {/* Painting canvas */}
       <mesh castShadow>
         <planeGeometry args={[size.width, size.height]} />
         <meshStandardMaterial map={texture} />
       </mesh>
 
-      {/* Spotlight target (painting center) */}
       <mesh ref={targetRef} position={[0, 0, 0]} />
 
-      {/* Track light fixture cylinder */}
       {withSpotlight && (
         <mesh position={[0, 3.4, 1.5]}>
           <cylinderGeometry args={[0.04, 0.06, 0.28, 8]} />
@@ -61,7 +97,6 @@ export default function Painting({
         </mesh>
       )}
 
-      {/* Spotlight from ceiling toward painting */}
       {withSpotlight && (
         <spotLight
           ref={lightRef}

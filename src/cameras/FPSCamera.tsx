@@ -1,5 +1,5 @@
 import { useFrame, useThree } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Vector3 } from "three";
 
 import useKeyboard from "../hooks/useKeyboard";
@@ -39,9 +39,9 @@ export default function FPSCamera({
   const direction = useRef(new Vector3());
   const keys = useKeyboard();
 
-  camera.position.x = position.x;
-  camera.position.y = position.x;
-  camera.position.z = position.z;
+  useEffect(() => {
+    camera.position.set(position.x, position.y, position.z);
+  }, []);
 
   useFrame((_, delta) => {
     direction.current.set(0, 0, 0);
