@@ -9,6 +9,7 @@ import Room from "../objects/room";
 import Painting from "../objects/painting";
 import LightBulb from "../lighting/LightBulb";
 import { type PopupInfo } from "../objects/Focusable";
+import EntryOverlay from "../overlay/EntryOverlay";
 
 const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
@@ -26,10 +27,11 @@ const NORTH_INFOS: PopupInfo[] = [
   {
     title: "Summer Solstice",
     subtitle: "M. Mitchell · 2024",
-    content: 
-    <>
-    <p>The warmth of the longest day captured in light and color.</p>
-    </>
+    content: (
+      <>
+        <p>The warmth of the longest day captured in light and color.</p>
+      </>
+    ),
   },
   {
     title: "Golden Hour",
@@ -88,14 +90,22 @@ function Scene({ width, height, depth, onFocus, onBlur }: SceneProps) {
           repeatY: 20,
         }} */
       />
-      <Room position={[0, 0, 0]} size={{ width, height, depth }} color="#888888" />
+      <Room
+        position={[0, 0, 0]}
+        size={{ width, height, depth }}
+        color="#888888"
+      />
 
       {/* North wall */}
       {Array.from({ length: NS_COUNT }, (_, i) => (
         <Painting
           key={`north-${i}`}
           imageUrl={"./paintings/summer.jpeg"}
-          position={[NS_START_X + i * NS_SPACING, PAINTING_Y, -height / 2 + 0.02]}
+          position={[
+            NS_START_X + i * NS_SPACING,
+            PAINTING_Y,
+            -height / 2 + 0.02,
+          ]}
           size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
           info={NORTH_INFOS[i]}
           onFocus={onFocus}
@@ -126,7 +136,11 @@ function Scene({ width, height, depth, onFocus, onBlur }: SceneProps) {
         <Painting
           key={`east-${i}`}
           imageUrl={"./paintings/summer.jpeg"}
-          position={[-width / 2 + 0.02, PAINTING_Y, EW_START_Z + i * EW_SPACING]}
+          position={[
+            -width / 2 + 0.02,
+            PAINTING_Y,
+            EW_START_Z + i * EW_SPACING,
+          ]}
           rotation={[0, Math.PI / 2, 0]}
           size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
           info={SIDE_INFOS[i]}
@@ -147,11 +161,13 @@ interface Props {
 }
 
 export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
-  const cameraPosition = { x: 0, y: 1.78, z: height / 2 - 0.5 };
+  const cameraPosition = { x: 0, y: 1.78, z: height / 3 };
 
+  const [started, setStarted] = useState(false);
   const [activeInfo, setActiveInfo] = useState<PopupInfo | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const activeInfoRef = useRef<PopupInfo | null>(null);
+  const pointerLockRef = useRef<any>(null);
 
   const handleFocus = useCallback((info: PopupInfo) => {
     activeInfoRef.current = info;
@@ -172,29 +188,78 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  const handleEnter = useCallback(() => {
+    setStarted(true);
+    pointerLockRef.current?.lock();
+  }, []);
+
   return (
     <div id="canvas-container">
-      {showPopup && activeInfo && (
-        <div style={{
+      {!started && <EntryOverlay onEnter={handleEnter} />}
+      <div
+        style={{
           position: "fixed",
-          bottom: "40px",
-          left: "40px",
-          background: "rgba(8, 8, 8, 0.85)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "6px",
-          padding: "16px 20px",
-          color: "#f0f0f0",
-          fontFamily: "Georgia, serif",
-          maxWidth: "300px",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          pointerEvents: "none",
           zIndex: 10,
-        }}>
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            width: 16,
+            height: 2,
+            background: "rgba(255,255,255,0.7)",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: 2,
+            height: 16,
+            background: "rgba(255,255,255,0.7)",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        />
+      </div>
+      {showPopup && activeInfo && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "40px",
+            left: "40px",
+            background: "rgba(8, 8, 8, 0.85)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "6px",
+            padding: "16px 20px",
+            color: "#f0f0f0",
+            fontFamily: "Georgia, serif",
+            maxWidth: "300px",
+            zIndex: 10,
+          }}
+        >
           {activeInfo.title && (
-            <div style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "4px" }}>
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                marginBottom: "4px",
+              }}
+            >
               {activeInfo.title}
             </div>
           )}
           {activeInfo.subtitle && (
-            <div style={{ fontSize: "12px", color: "#888", marginBottom: "10px" }}>
+            <div
+              style={{ fontSize: "12px", color: "#888", marginBottom: "10px" }}
+            >
               {activeInfo.subtitle}
             </div>
           )}
@@ -207,17 +272,20 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
       )}
 
       {activeInfo && !showPopup && (
-        <div style={{
-          position: "fixed",
-          bottom: "40px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          color: "rgba(255,255,255,0.5)",
-          fontFamily: "sans-serif",
-          fontSize: "13px",
-          pointerEvents: "none",
-          zIndex: 10,
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "40px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            color: "rgba(255, 255, 255, 1)",
+            fontFamily: "sans-serif",
+            fontSize: "55px",
+            pointerEvents: "none",
+            zIndex: 10,
+            WebkitTextStroke: '1.5px black'
+          }}
+        >
           Press <strong>X</strong> to view info
         </div>
       )}
@@ -234,10 +302,20 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           color={"#f0f0f0"}
         />
 
-        <Scene width={width} height={height} depth={depth} onFocus={handleFocus} onBlur={handleBlur} />
+        <Scene
+          width={width}
+          height={height}
+          depth={depth}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        />
 
         <EffectComposer>
-          <Bloom luminanceThreshold={0.6} luminanceSmoothing={0.4} intensity={0.6} />
+          <Bloom
+            luminanceThreshold={0.6}
+            luminanceSmoothing={0.4}
+            intensity={0.6}
+          />
         </EffectComposer>
 
         <FPSCamera
@@ -245,8 +323,9 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           height={height}
           position={cameraPosition}
           clampOffset={{ x: 0, y: 0, z: 0 }}
+          disabled={!started}
         />
-        <PointerLockControls />
+        <PointerLockControls ref={pointerLockRef} />
       </Canvas>
     </div>
   );

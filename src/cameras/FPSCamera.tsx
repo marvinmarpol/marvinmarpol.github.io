@@ -23,6 +23,7 @@ interface Props {
   };
   width?: number;
   height?: number;
+  disabled?: boolean;
 }
 
 export default function FPSCamera({
@@ -30,6 +31,7 @@ export default function FPSCamera({
   clampOffset = { x: 0, y: 0, z: 0 },
   width = 1,
   height = 1,
+  disabled = false,
 }: Props) {
   const halfWidth = width / 2;
   const halfHeight = height / 2;
@@ -45,6 +47,11 @@ export default function FPSCamera({
 
   useFrame((_, delta) => {
     direction.current.set(0, 0, 0);
+
+    if (disabled) {
+      velocity.current.set(0, 0, 0);
+      return;
+    }
 
     if (keys["KeyW"]) direction.current.z += 1;
     if (keys["KeyS"]) direction.current.z -= 1;

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -42,6 +42,7 @@ export default function Painting({
   const frameThickness = 0.06;
   const texture = useTexture(imageUrl);
   const focusedRef = useRef(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     if (lightRef.current && targetRef.current) {
@@ -56,7 +57,7 @@ export default function Painting({
     const distance = camera.position.distanceTo(_paintingPos);
 
     let shouldFocus = false;
-    if (distance < 4) {
+    if (hovered || distance < 4) {
       _toP.copy(_paintingPos).sub(camera.position).normalize();
       camera.getWorldDirection(_camDir);
       shouldFocus = _toP.dot(_camDir) > 0.75;
@@ -70,7 +71,13 @@ export default function Painting({
   });
 
   return (
-    <group ref={groupRef} position={position} rotation={rotation}>
+    <group
+      ref={groupRef}
+      position={position}
+      rotation={rotation}
+      onPointerEnter={() => { setHovered(true); document.body.style.cursor = "pointer"; }}
+      onPointerLeave={() => { setHovered(false); document.body.style.cursor = "auto"; }}
+    >
       {withFrame && (
         <mesh position={[0, 0, -0.012]}>
           <planeGeometry
@@ -79,7 +86,7 @@ export default function Painting({
               size.height + frameThickness * 2,
             ]}
           />
-          <meshStandardMaterial color="#111111" roughness={0.5} />
+          <meshStandardMaterial color={hovered ? "#c8a96e" : "#111111"} roughness={0.5} />
         </mesh>
       )}
 
