@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { PointerLockControls } from "@react-three/drei";
+import { PointerLockControls, OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 import FPSCamera from "../cameras/FPSCamera";
@@ -10,6 +10,7 @@ import Painting from "../objects/painting";
 import LightBulb from "../lighting/LightBulb";
 import { type PopupInfo } from "../objects/Focusable";
 import EntryOverlay from "../overlay/EntryOverlay";
+import useIsMobile from "../hooks/useIsMobile";
 
 const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
@@ -74,9 +75,19 @@ interface SceneProps {
   depth: number;
   onFocus: (info: PopupInfo) => void;
   onBlur: () => void;
+  isMobile: boolean;
+  onInfoClick: (info: PopupInfo) => void;
 }
 
-function Scene({ width, height, depth, onFocus, onBlur }: SceneProps) {
+function Scene({
+  width,
+  height,
+  depth,
+  onFocus,
+  onBlur,
+  isMobile,
+  onInfoClick,
+}: SceneProps) {
   return (
     <>
       <Floor
@@ -110,6 +121,7 @@ function Scene({ width, height, depth, onFocus, onBlur }: SceneProps) {
           info={NORTH_INFOS[i]}
           onFocus={onFocus}
           onBlur={onBlur}
+          onInfoClick={isMobile ? () => onInfoClick(NORTH_INFOS[i]) : undefined}
           withSpotlight
           withFrame
         />
@@ -126,6 +138,7 @@ function Scene({ width, height, depth, onFocus, onBlur }: SceneProps) {
           info={SIDE_INFOS[i]}
           onFocus={onFocus}
           onBlur={onBlur}
+          onInfoClick={isMobile ? () => onInfoClick(SIDE_INFOS[i]) : undefined}
           withSpotlight
           withFrame
         />
@@ -146,6 +159,7 @@ function Scene({ width, height, depth, onFocus, onBlur }: SceneProps) {
           info={SIDE_INFOS[i]}
           onFocus={onFocus}
           onBlur={onBlur}
+          onInfoClick={isMobile ? () => onInfoClick(SIDE_INFOS[i]) : undefined}
           withSpotlight
           withFrame
         />
@@ -162,6 +176,7 @@ interface Props {
 
 export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
   const cameraPosition = { x: 0, y: 1.78, z: height / 3 };
+  const isMobile = useIsMobile();
 
   const [started, setStarted] = useState(false);
   const [activeInfo, setActiveInfo] = useState<PopupInfo | null>(null);
@@ -180,55 +195,70 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
     setShowPopup(false);
   }, []);
 
+  const handleInfoClick = useCallback((info: PopupInfo) => {
+    setActiveInfo(info);
+    setShowPopup(true);
+  }, []);
+
+  const handlePointerMissed = useCallback(() => {
+    if (isMobile) {
+      setShowPopup(false);
+      setActiveInfo(null);
+    }
+  }, [isMobile]);
+
   useEffect(() => {
+    if (isMobile) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "KeyX" && activeInfoRef.current) setShowPopup((v) => !v);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [isMobile]);
 
   const handleEnter = useCallback(() => {
     setStarted(true);
-    pointerLockRef.current?.lock();
+    !isMobile && pointerLockRef.current?.lock();
   }, []);
 
   return (
     <div id="canvas-container">
       {!started && <EntryOverlay onEnter={handleEnter} />}
-      <div
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          pointerEvents: "none",
-          zIndex: 10,
-        }}
-      >
+      {!isMobile && (
         <div
           style={{
-            position: "absolute",
-            width: 16,
-            height: 2,
-            background: "rgba(255,255,255,0.7)",
+            position: "fixed",
             top: "50%",
             left: "50%",
-            transform: "translate(-50%,-50%)",
+            transform: "translate(-50%, -50%)",
+            pointerEvents: "none",
+            zIndex: 10,
           }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: 2,
-            height: 16,
-            background: "rgba(255,255,255,0.7)",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-          }}
-        />
-      </div>
+        >
+          <div
+            style={{
+              position: "absolute",
+              width: 16,
+              height: 2,
+              background: "rgba(255,255,255,0.7)",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              width: 2,
+              height: 16,
+              background: "rgba(255,255,255,0.7)",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+            }}
+          />
+        </div>
+      )}
       {showPopup && activeInfo && (
         <div
           style={{
@@ -271,7 +301,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
         </div>
       )}
 
-      {activeInfo && !showPopup && (
+      {!isMobile && activeInfo && !showPopup && (
         <div
           style={{
             position: "fixed",
@@ -283,14 +313,19 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
             fontSize: "55px",
             pointerEvents: "none",
             zIndex: 10,
-            WebkitTextStroke: '1.5px black'
+            WebkitTextStroke: "1.5px black",
           }}
         >
           Press <strong>X</strong> to view info
         </div>
       )}
 
-      <Canvas shadows gl={{ toneMappingExposure: 2.2 }} camera={{ fov: 75 }}>
+      <Canvas
+        shadows
+        gl={{ toneMappingExposure: 2.2 }}
+        camera={{ fov: 75 }}
+        onPointerMissed={handlePointerMissed}
+      >
         <fog attach="fog" args={["#555555", 8, 28]} />
         <ambientLight intensity={0.4} />
 
@@ -308,6 +343,8 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           depth={depth}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          isMobile={isMobile}
+          onInfoClick={handleInfoClick}
         />
 
         <EffectComposer>
@@ -318,14 +355,26 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           />
         </EffectComposer>
 
-        <FPSCamera
-          width={width}
-          height={height}
-          position={cameraPosition}
-          clampOffset={{ x: 0, y: 0, z: 0 }}
-          disabled={!started}
-        />
-        <PointerLockControls ref={pointerLockRef} />
+        {isMobile ? (
+          <OrbitControls
+            target={[0, cameraPosition.y, 0]}
+            maxPolarAngle={Math.PI / 2 + 0.1}
+            minPolarAngle={Math.PI / 2 + 0.1}
+            minDistance={2}
+            maxDistance={20}
+          />
+        ) : (
+          <>
+            <FPSCamera
+              width={width}
+              height={height}
+              position={cameraPosition}
+              clampOffset={{ x: 0, y: 0, z: 0 }}
+              disabled={!started}
+            />
+            <PointerLockControls ref={pointerLockRef} />
+          </>
+        )}
       </Canvas>
     </div>
   );

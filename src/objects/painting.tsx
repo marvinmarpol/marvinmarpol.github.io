@@ -17,6 +17,7 @@ interface Props {
   info?: PopupInfo;
   onFocus?: (info: PopupInfo) => void;
   onBlur?: () => void;
+  onInfoClick?: () => void;
 }
 
 const _paintingPos = new THREE.Vector3();
@@ -33,6 +34,7 @@ export default function Painting({
   info,
   onFocus,
   onBlur,
+  onInfoClick,
 }: Props) {
 
   const { camera } = useThree();
@@ -57,10 +59,10 @@ export default function Painting({
     const distance = camera.position.distanceTo(_paintingPos);
 
     let shouldFocus = false;
-    if (hovered || distance < 4) {
+    if (distance < 4) {
       _toP.copy(_paintingPos).sub(camera.position).normalize();
       camera.getWorldDirection(_camDir);
-      shouldFocus = _toP.dot(_camDir) > 0.75;
+      shouldFocus = _toP.dot(_camDir) > 0.5;
     }
 
     if (shouldFocus !== focusedRef.current) {
@@ -77,6 +79,7 @@ export default function Painting({
       rotation={rotation}
       onPointerEnter={() => { setHovered(true); document.body.style.cursor = "pointer"; }}
       onPointerLeave={() => { setHovered(false); document.body.style.cursor = "auto"; }}
+      onClick={onInfoClick ? (e) => { e.stopPropagation(); onInfoClick(); } : undefined}
     >
       {withFrame && (
         <mesh position={[0, 0, -0.012]}>
