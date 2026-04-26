@@ -4,13 +4,13 @@ import { PointerLockControls, OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 import FPSCamera from "../cameras/FPSCamera";
-import Floor from "../objects/floor";
 import Room from "../objects/room";
+import Floor from "../objects/floor";
 import Painting from "../objects/painting";
 import LightBulb from "../lighting/LightBulb";
-import { type PopupInfo } from "../objects/Focusable";
 import EntryOverlay from "../overlay/EntryOverlay";
 import useIsMobile from "../hooks/useIsMobile";
+import { type PopupInfo } from "../objects/Focusable";
 
 const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
@@ -23,6 +23,8 @@ const NS_START_X = -((NS_COUNT - 1) * NS_SPACING) / 2;
 const EW_COUNT = 3;
 const EW_SPACING = 4;
 const EW_START_Z = -((EW_COUNT - 1) * EW_SPACING) / 2;
+
+const MY_HEIGHT = 1.78;
 
 const NORTH_INFOS: PopupInfo[] = [
   {
@@ -95,11 +97,6 @@ function Scene({
         size={[width, height]}
         receiveShadow={true}
         color={"#aaaaaa"}
-        /* tileTexture={{
-          path: "./textures/wood.jpeg",
-          repeatX: 12,
-          repeatY: 20,
-        }} */
       />
       <Room
         position={[0, 0, 0]}
@@ -175,7 +172,7 @@ interface Props {
 }
 
 export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
-  const cameraPosition = { x: 0, y: 1.78, z: height / 3 };
+  const cameraPosition = { x: 0, y: MY_HEIGHT, z: height / 3 };
   const isMobile = useIsMobile();
 
   const [started, setStarted] = useState(false);
@@ -212,6 +209,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "KeyX" && activeInfoRef.current) setShowPopup((v) => !v);
     };
+
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isMobile]);
@@ -326,7 +324,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
         camera={{ fov: 75 }}
         onPointerMissed={handlePointerMissed}
       >
-        <fog attach="fog" args={["#555555", 8, 28]} />
+        <fog attach="fog" args={["#555555", depth, height]} />
         <ambientLight intensity={0.4} />
 
         <LightBulb
@@ -358,8 +356,8 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
         {isMobile ? (
           <OrbitControls
             target={[0, cameraPosition.y, 0]}
-            maxPolarAngle={Math.PI / 2 + 0.1}
-            minPolarAngle={Math.PI / 2 + 0.1}
+            maxPolarAngle={Math.PI / 2 - 0.1}
+            minPolarAngle={Math.PI / 2 - 0.5}
             minDistance={2}
             maxDistance={20}
           />

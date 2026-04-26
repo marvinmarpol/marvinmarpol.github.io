@@ -59,10 +59,10 @@ export default function Painting({
     const distance = camera.position.distanceTo(_paintingPos);
 
     let shouldFocus = false;
-    if (distance < 4) {
+    if (distance < 2) {
       _toP.copy(_paintingPos).sub(camera.position).normalize();
       camera.getWorldDirection(_camDir);
-      shouldFocus = _toP.dot(_camDir) > 0.5;
+      shouldFocus = _toP.dot(_camDir) > 0.55;
     }
 
     if (shouldFocus !== focusedRef.current) {

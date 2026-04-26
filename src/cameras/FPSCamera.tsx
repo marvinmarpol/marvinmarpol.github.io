@@ -6,9 +6,9 @@ import useKeyboard from "../hooks/useKeyboard";
 
 const CAMERA_RADIUS = 0.5;
 
-const ACCELERATION = 34; 
+const ACCELERATION = 34;
 const FRICTION = 3;
-const MAX_SPEED = 5;
+let MAX_SPEED = 5;
 
 interface Props {
   position?: {
