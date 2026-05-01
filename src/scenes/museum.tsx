@@ -1,6 +1,12 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from "react";
 import { Canvas } from "@react-three/fiber";
-import { PointerLockControls, OrbitControls } from "@react-three/drei";
+import { PointerLockControls, OrbitControls, Html } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 import FPSCamera from "../cameras/FPSCamera";
@@ -16,6 +22,9 @@ const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
 const PAINTING_Y = 2.6;
 
+const NS_PAINTING_WIDTH = 2.0;
+const NS_PAINTING_HEIGHT = 1.13; // ~16:9 to match landscape company banners
+
 const NS_COUNT = 4;
 const NS_SPACING = 5;
 const NS_START_X = -((NS_COUNT - 1) * NS_SPACING) / 2;
@@ -26,48 +35,246 @@ const EW_START_Z = -((EW_COUNT - 1) * EW_SPACING) / 2;
 
 const MY_HEIGHT = 1.78;
 
+function InfoLine({ children }: { children: ReactNode }) {
+  return <p style={{ margin: "0 0 8px 0", lineHeight: "1.55" }}>{children}</p>;
+}
+
+function InfoBullet({ children }: { children: ReactNode }) {
+  return (
+    <p style={{ margin: "0 0 3px 0", paddingLeft: "8px" }}>· {children}</p>
+  );
+}
+
+function WallLabel({ children }: { children: string }) {
+  return (
+    <Html center pointerEvents="none">
+      <span
+        style={{
+          color: "rgba(255,255,255,0.45)",
+          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+          fontSize: "11px",
+          fontWeight: 500,
+          letterSpacing: "0.28em",
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
+          userSelect: "none",
+        }}
+      >
+        {children}
+      </span>
+    </Html>
+  );
+}
+
+// North wall — Work Experience (company images)
+const NORTH_TEXTURES = [
+  "./paintings/north-0.jpg", // Krom Bank
+  "./paintings/north-1.webp", // Amarbank Technical Architect
+  "./paintings/north-2.webp", // Amarbank Backend Engineer
+  "./paintings/north-3.webp", // DattaBot & Telkom
+];
+
+// West wall — Achievements (dark abstract)
+const WEST_TEXTURES = [
+  "./paintings/west-0.jpg",
+  "./paintings/west-1.jpg",
+  "./paintings/west-2.jpg",
+];
+
+// East wall — Specializations (tech/code)
+const EAST_TEXTURES = [
+  "./paintings/east-0.jpg",
+  "./paintings/east-1.jpg",
+  "./paintings/east-2.jpg",
+];
+
+// North wall — Career Experience
 const NORTH_INFOS: PopupInfo[] = [
   {
-    title: "Summer Solstice",
-    subtitle: "M. Mitchell · 2024",
+    title: "Krom Bank Indonesia",
+    subtitle: "Lead Software Engineer · 2026 – Present",
     content: (
       <>
-        <p>The warmth of the longest day captured in light and color.</p>
+        <InfoLine>
+          Leading fullstack development of internal banking tools at PT. Krom
+          Bank Indonesia, Tbk — Engineering Personal Account division.
+        </InfoLine>
+        <InfoBullet>
+          Designing scalable frontend &amp; backend architecture
+        </InfoBullet>
+        <InfoBullet>Leading and mentoring engineering teams</InfoBullet>
+        <InfoBullet>Collaborating with product, design &amp; QA</InfoBullet>
+        <InfoBullet>Node.js · TypeScript · React · Angular · Vue.js</InfoBullet>
       </>
     ),
   },
   {
-    title: "Golden Hour",
-    subtitle: "M. Mitchell · 2024",
-    content: <p>A fleeting moment between afternoon and evening.</p>,
+    title: "Amarbank — Technical Architect",
+    subtitle: "Dec 2023 – Present",
+    content: (
+      <>
+        <InfoLine>
+          Defined system architecture, technical frameworks, and security
+          standards across engineering squads at Indonesia's digital bank.
+        </InfoLine>
+        <InfoBullet>+70% feature release accuracy via A/B testing</InfoBullet>
+        <InfoBullet>−40% regression via Codecept.js automation</InfoBullet>
+        <InfoBullet>100% PCI-DSS &amp; GDPR via anonymizer engine</InfoBullet>
+        <InfoBullet>Redux → Zustand migration completed in 3 months</InfoBullet>
+      </>
+    ),
   },
   {
-    title: "Still Waters",
-    subtitle: "M. Mitchell · 2023",
-    content: <p>Reflection on a calm lake at dusk.</p>,
+    title: "Amarbank — Backend Engineer",
+    subtitle: "Apr 2019 – Nov 2023 · Staff & Senior",
+    content: (
+      <>
+        <InfoLine>
+          Built and scaled core banking microservices in Golang. Mentored
+          engineers and owned backend reliability.
+        </InfoLine>
+        <InfoBullet>−50% deployment time: monolith → microservices</InfoBullet>
+        <InfoBullet>
+          −60% downtime via async event-driven architecture
+        </InfoBullet>
+        <InfoBullet>−70% duplicate storage via CQRS pattern</InfoBullet>
+        <InfoBullet>Mentored 7 engineers into senior promotions</InfoBullet>
+      </>
+    ),
   },
   {
-    title: "Open Field",
-    subtitle: "M. Mitchell · 2023",
-    content: <p>Vast expanses of grain under a pale sky.</p>,
+    title: "DattaBot & Telkom",
+    subtitle: "Senior Software Engineer · 2016 – 2019",
+    content: (
+      <>
+        <InfoLine>
+          Built blockchain infrastructure at DattaBot and secure QR-code payment
+          systems at Telkom Indonesia.
+        </InfoLine>
+        <InfoBullet>
+          −25% minting cost &amp; −30% gas via Solidity optimization
+        </InfoBullet>
+        <InfoBullet>
+          +70% query perf: DynamoDB → PostgreSQL migration
+        </InfoBullet>
+        <InfoBullet>
+          +50% performance: PHP legacy → Java J2EE at Telkom
+        </InfoBullet>
+        <InfoBullet>ISO8583 mobile payment integration with Rintis</InfoBullet>
+      </>
+    ),
   },
 ];
 
-const SIDE_INFOS: PopupInfo[] = [
+// West wall — Achievements
+const WEST_INFOS: PopupInfo[] = [
   {
-    title: "Threshold",
-    subtitle: "M. Mitchell · 2022",
-    content: <p>Standing at the edge of something new.</p>,
+    title: "A/B Testing Rollout",
+    subtitle: "Amarbank · 2024",
+    content: (
+      <>
+        <InfoLine>
+          Designed and rolled out an A/B testing framework across all
+          customer-facing features, replacing manual release gates with
+          data-driven experimentation at scale.
+        </InfoLine>
+        <InfoBullet>+70% feature release accuracy</InfoBullet>
+        <InfoBullet>Reduced rollback incidents significantly</InfoBullet>
+        <InfoBullet>Adopted company-wide across engineering squads</InfoBullet>
+      </>
+    ),
   },
   {
-    title: "Silence",
-    subtitle: "M. Mitchell · 2021",
-    content: <p>The quiet before the storm arrives.</p>,
+    title: "Anonymizer Engine",
+    subtitle: "Amarbank · 2024",
+    content: (
+      <>
+        <InfoLine>
+          Architected and led delivery of a data anonymization pipeline ensuring
+          full compliance with international privacy and banking security
+          standards across all services.
+        </InfoLine>
+        <InfoBullet>100% PCI-DSS &amp; GDPR compliance achieved</InfoBullet>
+        <InfoBullet>Zero data breach incidents post-launch</InfoBullet>
+        <InfoBullet>
+          Protects sensitive customer data at banking scale
+        </InfoBullet>
+      </>
+    ),
   },
   {
-    title: "Resonance",
-    subtitle: "M. Mitchell · 2020",
-    content: <p>Sound made visible through shape and hue.</p>,
+    title: "Microservices Migration",
+    subtitle: "Amarbank · 2022–2023",
+    content: (
+      <>
+        <InfoLine>
+          Led full architectural migration from a distributed monolith to an
+          async event-driven microservices model, eliminating bottlenecks during
+          national-scale traffic spikes.
+        </InfoLine>
+        <InfoBullet>−50% deployment time</InfoBullet>
+        <InfoBullet>−60% service downtime</InfoBullet>
+        <InfoBullet>−70% duplicate storage via CQRS</InfoBullet>
+      </>
+    ),
+  },
+];
+
+// East wall — Specializations
+const EAST_INFOS: PopupInfo[] = [
+  {
+    title: "System Architecture",
+    subtitle: "Microservices · Event-Driven · Cloud · Security",
+    content: (
+      <>
+        <InfoLine>
+          Designing and owning end-to-end system architecture across distributed
+          systems, cloud infrastructure, and regulated financial environments.
+        </InfoLine>
+        <InfoBullet>
+          Microservices · Event-driven · CQRS · Serverless
+        </InfoBullet>
+        <InfoBullet>AWS Lambda · Cloud Architecture · DevOps</InfoBullet>
+        <InfoBullet>PCI-DSS · GDPR · ISO8583 compliance</InfoBullet>
+        <InfoBullet>Solidity · Ethereum · Smart Contracts</InfoBullet>
+      </>
+    ),
+  },
+  {
+    title: "Technical Leadership",
+    subtitle: "Mentorship · Engineering Management · Strategy",
+    content: (
+      <>
+        <InfoLine>
+          Leading engineering teams as both a technical authority and people
+          manager — from architecture reviews to cross-functional alignment
+          between product, design, and QA.
+        </InfoLine>
+        <InfoBullet>Mentored 7 engineers into senior promotions</InfoBullet>
+        <InfoBullet>
+          Served as Interim Engineering Manager at Amarbank
+        </InfoBullet>
+        <InfoBullet>Defined technical frameworks across squads</InfoBullet>
+        <InfoBullet>Led hiring, onboarding, and engineering culture</InfoBullet>
+      </>
+    ),
+  },
+  {
+    title: "Full-Stack Engineering",
+    subtitle: "Go · Node.js · React · Vue · TypeScript",
+    content: (
+      <>
+        <InfoLine>
+          Fluent across the full stack — from high-throughput backend
+          microservices in Go to pixel-precise frontend interfaces in React and
+          Vue.
+        </InfoLine>
+        <InfoBullet>Go · Node.js · NestJS · Python · PHP · Java</InfoBullet>
+        <InfoBullet>React · Vue · Angular · Next.js · Nuxt.js</InfoBullet>
+        <InfoBullet>TypeScript · Redux · Zustand · Vuex</InfoBullet>
+        <InfoBullet>PostgreSQL · MongoDB · Redis · Elasticsearch</InfoBullet>
+      </>
+    ),
   },
 ];
 
@@ -79,16 +286,23 @@ interface SceneProps {
   onBlur: () => void;
   isMobile: boolean;
   onInfoClick: (info: PopupInfo) => void;
+  northInfos: PopupInfo[];
+  westInfos: PopupInfo[];
+  eastInfos: PopupInfo[];
+  started: boolean;
 }
 
 function Scene({
   width,
   height,
-  depth,
   onFocus,
   onBlur,
   isMobile,
   onInfoClick,
+  northInfos,
+  westInfos,
+  eastInfos,
+  started,
 }: SceneProps) {
   return (
     <>
@@ -100,52 +314,68 @@ function Scene({
       />
       <Room
         position={[0, 0, 0]}
-        size={{ width, height, depth }}
+        size={{ width, height, depth: 12 }}
         color="#888888"
       />
 
-      {/* North wall */}
+      {/* North wall — Work Experience */}
       {Array.from({ length: NS_COUNT }, (_, i) => (
         <Painting
           key={`north-${i}`}
-          imageUrl={"./paintings/summer.jpeg"}
+          imageUrl={NORTH_TEXTURES[i]}
+          frameColor="#1a1a2e"
           position={[
             NS_START_X + i * NS_SPACING,
             PAINTING_Y,
             -height / 2 + 0.02,
           ]}
-          size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
-          info={NORTH_INFOS[i]}
+          size={{ width: NS_PAINTING_WIDTH, height: NS_PAINTING_HEIGHT }}
+          info={northInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
-          onInfoClick={isMobile ? () => onInfoClick(NORTH_INFOS[i]) : undefined}
+          onInfoClick={isMobile ? () => onInfoClick(northInfos[i]) : undefined}
           withSpotlight
           withFrame
         />
       ))}
+      {started && (
+        <group position={[0, 4.2, -height / 2 + 0.05]}>
+          <WallLabel>Work Experience</WallLabel>
+        </group>
+      )}
 
-      {/* West wall */}
+      {/* West wall — Achievements */}
       {Array.from({ length: EW_COUNT }, (_, i) => (
         <Painting
           key={`west-${i}`}
-          imageUrl={"./paintings/summer.jpeg"}
+          imageUrl={WEST_TEXTURES[i]}
+          frameColor="#2e1a1a"
           position={[width / 2 - 0.02, PAINTING_Y, EW_START_Z + i * EW_SPACING]}
           rotation={[0, -Math.PI / 2, 0]}
           size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
-          info={SIDE_INFOS[i]}
+          info={westInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
-          onInfoClick={isMobile ? () => onInfoClick(SIDE_INFOS[i]) : undefined}
+          onInfoClick={isMobile ? () => onInfoClick(westInfos[i]) : undefined}
           withSpotlight
           withFrame
         />
       ))}
+      {started && (
+        <group
+          position={[width / 2 - 0.05, 4.2, 0]}
+          rotation={[0, -Math.PI / 2, 0]}
+        >
+          <WallLabel>Achievements</WallLabel>
+        </group>
+      )}
 
-      {/* East wall */}
+      {/* East wall — Specializations */}
       {Array.from({ length: EW_COUNT }, (_, i) => (
         <Painting
           key={`east-${i}`}
-          imageUrl={"./paintings/summer.jpeg"}
+          imageUrl={EAST_TEXTURES[i]}
+          frameColor="#1a2e1a"
           position={[
             -width / 2 + 0.02,
             PAINTING_Y,
@@ -153,14 +383,22 @@ function Scene({
           ]}
           rotation={[0, Math.PI / 2, 0]}
           size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
-          info={SIDE_INFOS[i]}
+          info={eastInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
-          onInfoClick={isMobile ? () => onInfoClick(SIDE_INFOS[i]) : undefined}
+          onInfoClick={isMobile ? () => onInfoClick(eastInfos[i]) : undefined}
           withSpotlight
           withFrame
         />
       ))}
+      {started && (
+        <group
+          position={[-width / 2 + 0.05, 4.2, 0]}
+          rotation={[0, Math.PI / 2, 0]}
+        >
+          <WallLabel>Specializations</WallLabel>
+        </group>
+      )}
     </>
   );
 }
@@ -209,14 +447,16 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "KeyX" && activeInfoRef.current) setShowPopup((v) => !v);
     };
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isMobile]);
 
   const handleEnter = useCallback(() => {
     setStarted(true);
-    !isMobile && pointerLockRef.current?.lock();
+    if (!isMobile) {
+      pointerLockRef.current?.lock();
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    }
   }, []);
 
   return (
@@ -257,28 +497,31 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           />
         </div>
       )}
+
       {showPopup && activeInfo && (
         <div
           style={{
             position: "fixed",
             bottom: "40px",
             left: "40px",
-            background: "rgba(8, 8, 8, 0.85)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "6px",
-            padding: "16px 20px",
+            background: "rgba(8, 8, 8, 0.92)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderLeft: "3px solid rgba(255,255,255,0.22)",
+            borderRadius: "4px",
+            padding: "18px 22px",
             color: "#f0f0f0",
-            fontFamily: "Georgia, serif",
-            maxWidth: "300px",
+            fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+            maxWidth: "380px",
             zIndex: 10,
           }}
         >
           {activeInfo.title && (
             <div
               style={{
-                fontSize: "16px",
-                fontWeight: "bold",
+                fontSize: "15px",
+                fontWeight: "600",
                 marginBottom: "4px",
+                letterSpacing: "0.02em",
               }}
             >
               {activeInfo.title}
@@ -286,13 +529,18 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           )}
           {activeInfo.subtitle && (
             <div
-              style={{ fontSize: "12px", color: "#888", marginBottom: "10px" }}
+              style={{
+                fontSize: "11px",
+                color: "#666",
+                marginBottom: "12px",
+                letterSpacing: "0.04em",
+              }}
             >
               {activeInfo.subtitle}
             </div>
           )}
           {activeInfo.content && (
-            <div style={{ fontSize: "13px", color: "#bbb", lineHeight: "1.6" }}>
+            <div style={{ fontSize: "12px", color: "#bbb", lineHeight: "1.6" }}>
               {activeInfo.content}
             </div>
           )}
@@ -307,7 +555,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
             left: "50%",
             transform: "translateX(-50%)",
             color: "rgba(255, 255, 255, 1)",
-            fontFamily: "sans-serif",
+            fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
             fontSize: "55px",
             pointerEvents: "none",
             zIndex: 10,
@@ -343,6 +591,10 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           onBlur={handleBlur}
           isMobile={isMobile}
           onInfoClick={handleInfoClick}
+          northInfos={NORTH_INFOS}
+          westInfos={WEST_INFOS}
+          eastInfos={EAST_INFOS}
+          started={started}
         />
 
         <EffectComposer>

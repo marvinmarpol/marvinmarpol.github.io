@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -14,6 +14,7 @@ interface Props {
   imageUrl: string;
   withSpotlight?: boolean;
   withFrame?: boolean;
+  frameColor?: string;
   info?: PopupInfo;
   onFocus?: (info: PopupInfo) => void;
   onBlur?: () => void;
@@ -31,6 +32,7 @@ export default function Painting({
   imageUrl,
   withSpotlight = true,
   withFrame = true,
+  frameColor = "#111111",
   info,
   onFocus,
   onBlur,
@@ -43,7 +45,21 @@ export default function Painting({
   const frameThickness = 0.06;
   const texture = useTexture(imageUrl);
   const focusedRef = useRef(false);
-  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    const img = texture.image as HTMLImageElement | undefined;
+    if (!img?.width || !img?.height) return;
+    const imgAspect = img.width / img.height;
+    const meshAspect = size.width / size.height;
+    if (imgAspect > meshAspect) {
+      texture.repeat.set(meshAspect / imgAspect, 1);
+      texture.offset.set((1 - texture.repeat.x) / 2, 0);
+    } else {
+      texture.repeat.set(1, imgAspect / meshAspect);
+      texture.offset.set(0, (1 - texture.repeat.y) / 2);
+    }
+    texture.needsUpdate = true;
+  }, [texture, size.width, size.height]);
 
   useEffect(() => {
     if (lightRef.current && targetRef.current) {
@@ -58,7 +74,7 @@ export default function Painting({
     const distance = camera.position.distanceTo(_paintingPos);
 
     let shouldFocus = false;
-    if (distance < 2.75) {
+    if (distance < 3) {
       _toP.copy(_paintingPos).sub(camera.position).normalize();
       camera.getWorldDirection(_camDir);
       shouldFocus = _toP.dot(_camDir) > 0.55;
@@ -77,11 +93,9 @@ export default function Painting({
       position={position}
       rotation={rotation}
       onPointerEnter={() => {
-        setHovered(true);
         document.body.style.cursor = "pointer";
       }}
       onPointerLeave={() => {
-        setHovered(false);
         document.body.style.cursor = "auto";
       }}
       onClick={
@@ -101,7 +115,7 @@ export default function Painting({
               size.height + frameThickness * 2,
             ]}
           />
-          <meshStandardMaterial color={"#111111"} roughness={0.5} />
+          <meshStandardMaterial color={frameColor} roughness={0.5} />
         </mesh>
       )}
 

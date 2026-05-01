@@ -2,7 +2,17 @@
   "permissions": {
     "allow": [
       "Bash(npm run *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "WebFetch(domain:www.paul-factory.com)",
+      "WebFetch(domain:krom.id)",
+      "WebFetch(domain:www.amarbank.co.id)",
+      "WebFetch(domain:www.telkom.co.id)",
+      "WebFetch(domain:dattabot.com)",
+      "WebSearch",
+      "WebFetch(domain:dattabot.io)",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(python3 *)",
+      "Bash(sips *)"
     ]
   }
 }
