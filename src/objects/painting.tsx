@@ -36,7 +36,6 @@ export default function Painting({
   onBlur,
   onInfoClick,
 }: Props) {
-
   const { camera } = useThree();
   const groupRef = useRef<THREE.Group>(null);
   const lightRef = useRef<any>(null);
@@ -59,7 +58,7 @@ export default function Painting({
     const distance = camera.position.distanceTo(_paintingPos);
 
     let shouldFocus = false;
-    if (distance < 2) {
+    if (distance < 2.75) {
       _toP.copy(_paintingPos).sub(camera.position).normalize();
       camera.getWorldDirection(_camDir);
       shouldFocus = _toP.dot(_camDir) > 0.55;
@@ -77,9 +76,22 @@ export default function Painting({
       ref={groupRef}
       position={position}
       rotation={rotation}
-      onPointerEnter={() => { setHovered(true); document.body.style.cursor = "pointer"; }}
-      onPointerLeave={() => { setHovered(false); document.body.style.cursor = "auto"; }}
-      onClick={onInfoClick ? (e) => { e.stopPropagation(); onInfoClick(); } : undefined}
+      onPointerEnter={() => {
+        setHovered(true);
+        document.body.style.cursor = "pointer";
+      }}
+      onPointerLeave={() => {
+        setHovered(false);
+        document.body.style.cursor = "auto";
+      }}
+      onClick={
+        onInfoClick
+          ? (e) => {
+              e.stopPropagation();
+              onInfoClick();
+            }
+          : undefined
+      }
     >
       {withFrame && (
         <mesh position={[0, 0, -0.012]}>
@@ -89,7 +101,7 @@ export default function Painting({
               size.height + frameThickness * 2,
             ]}
           />
-          <meshStandardMaterial color={hovered ? "#c8a96e" : "#111111"} roughness={0.5} />
+          <meshStandardMaterial color={"#111111"} roughness={0.5} />
         </mesh>
       )}
 
@@ -100,20 +112,24 @@ export default function Painting({
 
       <mesh ref={targetRef} position={[0, 0, 0]} />
 
-      {withSpotlight && (
-        <mesh position={[0, 3.4, 1.5]}>
+      {/* {withSpotlight && (
+        <mesh position={[0, 2.25, 2.5]} rotation={[Math.PI / 4, 0, 0]}>
           <cylinderGeometry args={[0.04, 0.06, 0.28, 8]} />
-          <meshStandardMaterial color="#555555" roughness={0.3} metalness={0.7} />
+          <meshStandardMaterial
+            color="#555555"
+            roughness={0.3}
+            metalness={0.7}
+          />
         </mesh>
-      )}
+      )} */}
 
       {withSpotlight && (
         <spotLight
           ref={lightRef}
-          position={[0, 3.3, 1.6]}
+          position={[0, 3.3, 2.6]}
           angle={0.35}
           penumbra={0.4}
-          intensity={120}
+          intensity={55}
           distance={12}
           decay={1.5}
         />
