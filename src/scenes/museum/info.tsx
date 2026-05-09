@@ -59,9 +59,9 @@ export const NORTH_TEXTURES = [
 
 // West wall — Achievements (dark abstract)
 export const WEST_TEXTURES = [
-  "./paintings/west-0.jpg",
-  "./paintings/west-1.jpg",
-  "./paintings/west-2.jpg",
+  "./paintings/west-0.svg",
+  "./paintings/west-1.svg",
+  "./paintings/west-2.svg",
 ];
 
 // East wall — Specializations (tech/code)

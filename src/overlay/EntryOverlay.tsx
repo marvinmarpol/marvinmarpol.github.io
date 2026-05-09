@@ -23,8 +23,8 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
         <div
           style={{
             position: "relative",
-            width: 80,
-            height: 80,
+            width: 89,
+            height: 89,
             marginBottom: 32,
           }}
         >
@@ -55,31 +55,14 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
             MM
           </div>
         </div>
-        <div
-          style={{
-            width: 200,
-            height: 1,
-            background: "rgba(255,255,255,0.08)",
-            marginBottom: 14,
-          }}
-        >
-          <div
-            style={{
-              width: `${progress}%`,
-              height: "100%",
-              background: "#d0e60d",
-              transition: "width 0.4s ease",
-            }}
-          />
-        </div>
+
         <div
           style={{
             color: "#444",
             fontSize: 11,
             letterSpacing: "0.22em",
           }}
-        >
-          LOADING...
+        >Loading {progress}%
         </div>
       </div>
     );

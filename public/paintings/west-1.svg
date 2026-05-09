@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="maskBand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#d0e60d" stop-opacity="0.0"/>
+      <stop offset="40%"  stop-color="#d0e60d" stop-opacity="0.08"/>
+      <stop offset="50%"  stop-color="#d0e60d" stop-opacity="0.18"/>
+      <stop offset="60%"  stop-color="#d0e60d" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#d0e60d" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="800" fill="#090909"/>
+
+  <!-- Faint shield outline in background -->
+  <path d="M300 110 L480 190 L480 390 Q480 530 300 620 Q120 530 120 390 L120 190 Z"
+        fill="none" stroke="#d0e60d" stroke-width="1" opacity="0.06"/>
+  <path d="M300 145 L455 212 L455 385 Q455 505 300 585 Q145 505 145 385 L145 212 Z"
+        fill="none" stroke="#d0e60d" stroke-width="0.5" opacity="0.04"/>
+
+  <!-- Data rows: raw plaintext (above processing band) -->
+  <!-- Row labels show hex-like data strings -->
+  <g font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#ffffff">
+    <text x="44" y="120" opacity="0.28">4d61 7276 696e 204d 6974 6368 656c 6c20 2d20 4944</text>
+    <text x="44" y="145" opacity="0.22">A3:F7 card_num=4532●●●●●●●●9012  cvv=●●●</text>
+    <text x="44" y="170" opacity="0.28">acc:0x7f3c  bal=Rp 48,200,000  trx=YES</text>
+    <text x="44" y="195" opacity="0.22">user_id:8821  dob=1990-04-12  ktp=3174</text>
+    <text x="44" y="220" opacity="0.28">txn:B99F  amt=520000  dest=BCA-7712</text>
+    <text x="44" y="245" opacity="0.22">email=m****@gmail.com  ph=+62-812-****</text>
+    <text x="44" y="270" opacity="0.28">ip=192.168.77.41  device=Android/13</text>
+    <text x="44" y="295" opacity="0.22">session=e3b0c44298fc1c149afb  sig=SHA256</text>
+  </g>
+
+  <!-- Processing band glow -->
+  <rect x="0" y="310" width="600" height="140" fill="url(#maskBand)"/>
+
+  <!-- Processing band label + line -->
+  <line x1="40" y1="382" x2="560" y2="382" stroke="#d0e60d" stroke-width="0.8" opacity="0.35"/>
+  <text x="300" y="373" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9" fill="#d0e60d" opacity="0.5"
+        letter-spacing="4">ANONYMIZER ENGINE</text>
+  <text x="300" y="392" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9" fill="#d0e60d" opacity="0.5"
+        letter-spacing="4">PCI-DSS · GDPR</text>
+
+  <!-- Data rows: masked output (below processing band) -->
+  <g font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#d0e60d">
+    <text x="44" y="470" opacity="0.55">████ ████ ████ ████ ████ ████ ██  user:ANON</text>
+    <text x="44" y="495" opacity="0.45">A3:●● card_num=████████████████  cvv=███</text>
+    <text x="44" y="520" opacity="0.55">acc:████  bal=█████████  trx=YES</text>
+    <text x="44" y="545" opacity="0.45">user_id:████  dob=████-██-██  ktp=████</text>
+    <text x="44" y="570" opacity="0.55">txn:████  amt=██████  dest=███-████</text>
+    <text x="44" y="595" opacity="0.45">email=██████████████  ph=███-███-████</text>
+    <text x="44" y="620" opacity="0.55">ip=███.███.██.██  device=████████</text>
+    <text x="44" y="645" opacity="0.45">session=████████████████████  sig=█████</text>
+  </g>
+
+  <!-- Bottom rule + metrics -->
+  <line x1="44" y1="690" x2="556" y2="690" stroke="#d0e60d" stroke-width="0.5" opacity="0.15"/>
+
+  <text x="300" y="718" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="11" fill="#d0e60d" opacity="0.65"
+        letter-spacing="1">100% PCI-DSS &amp; GDPR</text>
+  <text x="300" y="736" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9" fill="#d0e60d" opacity="0.3"
+        letter-spacing="2">ZERO BREACH INCIDENTS</text>
+
+  <!-- Corner tag -->
+  <text x="28" y="786"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.18"
+        letter-spacing="3">ANONYMIZER · 2024</text>
+</svg>
