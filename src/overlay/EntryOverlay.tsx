@@ -12,7 +12,7 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
         position: "absolute",
         inset: 0,
         zIndex: 1,
-        background: "rgba(0,0,0,0.93)",
+        background: "rgba(0,0,0,0.8)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -20,6 +20,19 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       }}
       onClick={(e) => e.stopPropagation()}
     >
+      <img
+        src="./profile.webp"
+        alt="Marvin Mitchell"
+        style={{
+          width: "144px",
+          height: "144px",
+          borderRadius: "50%",
+          objectFit: "cover",
+          objectPosition: "center center",
+          marginBottom: "55px",
+        }}
+      />
+
       <div
         style={{
           color: "#f0f0f0",
@@ -170,7 +183,7 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
               "rgba(255,255,255,0.18)";
         }}
       >
-        {loading ? `LOADING` : "ENTER"}
+        {loading ? `LOADING...` : "ENTER"}
       </button>
     </div>
   );

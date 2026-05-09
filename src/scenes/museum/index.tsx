@@ -5,7 +5,6 @@ import {
   PointerLockControls,
   OrbitControls,
   useProgress,
-  Stats,
 } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
@@ -21,8 +20,10 @@ import {
   EAST_INFOS,
   EAST_TEXTURES,
   NORTH_INFOS,
+  NORTH_SIZES,
   NORTH_TEXTURES,
   SOUTH_INFOS,
+  SOUTH_SIZES,
   SOUTH_TEXTURES,
   WallLabel,
   WEST_INFOS,
@@ -33,8 +34,6 @@ const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
 const PAINTING_Y = 2.6;
 
-const NS_PAINTING_WIDTH = 2.0;
-const NS_PAINTING_HEIGHT = 1.13; // ~16:9 to match landscape company banners
 
 const NS_COUNT = 5;
 const NS_SPACING = 5;
@@ -51,6 +50,44 @@ const SS_START_X = -((SS_COUNT - 1) * SS_SPACING) / 2;
 const MY_HEIGHT = 1.78;
 
 const _defaultOrbitTarget = new Vector3(0, MY_HEIGHT, 0);
+
+function WallLight({
+  position,
+  targetPos,
+  angle = 1,
+  intensity = 30,
+  distance = 14,
+}: {
+  position: [number, number, number];
+  targetPos: [number, number, number];
+  angle?: number;
+  intensity?: number;
+  distance?: number;
+}) {
+  const lightRef = useRef<any>(null);
+  const targetRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (lightRef.current && targetRef.current) {
+      lightRef.current.target = targetRef.current;
+    }
+  }, []);
+
+  return (
+    <>
+      <spotLight
+        ref={lightRef}
+        position={position}
+        angle={angle}
+        penumbra={0.5}
+        intensity={intensity}
+        distance={distance}
+        decay={1.5}
+      />
+      <object3D ref={targetRef} position={targetPos} />
+    </>
+  );
+}
 
 function MobilePanController({
   orbitRef,
@@ -103,16 +140,25 @@ function Scene({
 }: SceneProps) {
   return (
     <>
-      <Floor
-        position={[0, 0, 0]}
-        size={[width, height]}
-        receiveShadow={true}
-        color={"#aaaaaa"}
-      />
+      <Floor position={[0, 0, 0]} size={[width, height]} color={"#aaaaaa"} />
       <Room
         position={[0, 0, 0]}
         size={{ width, height, depth: 12 }}
         color="#888888"
+      />
+
+      {/* Wall accent lights — one per wall */}
+      <WallLight
+        position={[width / 2 - 5, 6, 0]}
+        targetPos={[width / 2, PAINTING_Y, 0]}
+      />
+      <WallLight
+        position={[-width / 2 + 5, 6, 0]}
+        targetPos={[-width / 2, PAINTING_Y, 0]}
+      />
+      <WallLight
+        position={[0, 6, height / 2 - 5]}
+        targetPos={[0, PAINTING_Y, height / 2]}
       />
 
       {/* North wall — Work Experience */}
@@ -126,7 +172,7 @@ function Scene({
             PAINTING_Y,
             -height / 2 + 0.02,
           ]}
-          size={{ width: NS_PAINTING_WIDTH, height: NS_PAINTING_HEIGHT }}
+          size={NORTH_SIZES[i]}
           info={northInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -180,7 +226,6 @@ function Scene({
                 }
               : undefined
           }
-          withSpotlight
           withFrame
         />
       ))}
@@ -223,7 +268,6 @@ function Scene({
                 }
               : undefined
           }
-          withSpotlight
           withFrame
         />
       ))}
@@ -242,9 +286,13 @@ function Scene({
           key={`south-${i}`}
           imageUrl={SOUTH_TEXTURES[i]}
           frameColor="#1a1a2e"
-          position={[SS_START_X + i * SS_SPACING, PAINTING_Y, height / 2 - 0.02]}
+          position={[
+            SS_START_X + i * SS_SPACING,
+            PAINTING_Y,
+            height / 2 - 0.02,
+          ]}
           rotation={[0, Math.PI, 0]}
-          size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
+          size={SOUTH_SIZES[i]}
           info={southInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
@@ -262,12 +310,14 @@ function Scene({
                 }
               : undefined
           }
-          withSpotlight
           withFrame
         />
       ))}
       {started && (
-        <group position={[0, 4.2, height / 2 - 0.05]} rotation={[0, Math.PI, 0]}>
+        <group
+          position={[0, 4.2, height / 2 - 0.05]}
+          rotation={[0, Math.PI, 0]}
+        >
           <WallLabel>Socials</WallLabel>
         </group>
       )}
@@ -477,7 +527,6 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
       )}
 
       <Canvas
-        shadows
         gl={{ toneMappingExposure: 2.2 }}
         camera={{ fov: 75 }}
         onPointerMissed={handlePointerMissed}
@@ -511,9 +560,9 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
 
         <EffectComposer>
           <Bloom
-            luminanceThreshold={0.6}
+            luminanceThreshold={0.8}
             luminanceSmoothing={0.4}
-            intensity={0.6}
+            intensity={0.3}
           />
         </EffectComposer>
 
@@ -542,7 +591,6 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
             <PointerLockControls ref={pointerLockRef} />
           </>
         )}
-        <Stats/>
       </Canvas>
     </div>
   );

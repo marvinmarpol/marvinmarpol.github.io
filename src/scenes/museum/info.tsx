@@ -36,11 +36,28 @@ export function WallLabel({ children }: { children: string }) {
   );
 }
 
+// Painting sizes derived from actual texture aspect ratios (ratio × base height)
+// North: base height 1.13 — widths = ratio × 1.13
+export const NORTH_SIZES = [
+  { width: 1.50, height: 1.13 }, // Telkom     866×650   ratio 1.332
+  { width: 1.70, height: 1.13 }, // DattaBot  1620×1080  ratio 1.500
+  { width: 2.70, height: 1.13 }, // Amarbank BE 2586×1084 ratio 2.386
+  { width: 1.88, height: 1.13 }, // Amarbank TA 1951×1176 ratio 1.659
+  { width: 2.26, height: 1.13 }, // Krom Bank 1280×640   ratio 2.000
+];
+
+// South: portrait (TikTok/Instagram h=2.0), landscape (djrekord h=1.2)
+export const SOUTH_SIZES = [
+  { width: 0.92, height: 2.00 }, // TikTok     552×1194  ratio 0.462
+  { width: 2.59, height: 1.20 }, // djrekord  2890×1338  ratio 2.160
+  { width: 0.92, height: 2.00 }, // Instagram  586×1270  ratio 0.461
+];
+
 // North wall — Work Experience (company images, oldest → newest left to right)
 export const NORTH_TEXTURES = [
   "./paintings/north-4.jpg",  // Telkom Indonesia
   "./paintings/north-3.jpg",  // DattaBot
-  "./paintings/north-2.webp", // Amarbank Backend Engineer
+  "./paintings/north-2.jpg",  // Amarbank Backend Engineer
   "./paintings/north-1.webp", // Amarbank Technical Architect
   "./paintings/north-0.jpg",  // Krom Bank
 ];
@@ -272,9 +289,9 @@ export const  EAST_INFOS: PopupInfo[] = [
 
 // South wall — Socials
 export const SOUTH_TEXTURES = [
-  "./paintings/south-0.jpg", // TikTok
+  "./paintings/south-0.webp", // TikTok
   "./paintings/south-1.jpg", // djrekord.com
-  "./paintings/south-2.jpg", // Instagram
+  "./paintings/south-2.webp", // Instagram
 ];
 
 export const SOUTH_INFOS: PopupInfo[] = [

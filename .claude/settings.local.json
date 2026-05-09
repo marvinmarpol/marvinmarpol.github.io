@@ -34,7 +34,22 @@
       "Bash(identify /tmp/dattabot-raw.jpg /tmp/telkom-raw.jpg)",
       "Bash(cp /tmp/south-0.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-0.jpg)",
       "Bash(cp /tmp/south-1.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-1.jpg)",
-      "Bash(cp /tmp/south-2.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-2.jpg)"
+      "Bash(cp /tmp/south-2.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-2.jpg)",
+      "WebFetch(domain:tiktokbrandhub.com)",
+      "WebFetch(domain:www.meta.com)",
+      "WebFetch(domain:developers.tiktok.com)",
+      "WebFetch(domain:brandfetch.com)",
+      "WebFetch(domain:sf16-va.tiktokcdn.com)",
+      "WebFetch(domain:pngimg.com)",
+      "WebFetch(domain:stickpng.com)",
+      "WebFetch(domain:static.xx.fbcdn.net)",
+      "WebFetch(domain:newsroom.tiktok.com)",
+      "WebFetch(domain:www.citypng.com)",
+      "WebFetch(domain:uxwing.com)",
+      "Bash(cp /tmp/tiktok-full.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-0.jpg)",
+      "Bash(cp /tmp/instagram-new.webp /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-2.jpg)",
+      "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp available'\\)\")",
+      "Bash(sort -k5 -rh)"
     ]
   }
 }

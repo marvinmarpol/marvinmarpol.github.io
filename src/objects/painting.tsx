@@ -29,7 +29,7 @@ export default function Painting({
   rotation = [0, 0, 0],
   size = { width: 1, height: 1 },
   imageUrl,
-  withSpotlight = true,
+  withSpotlight = false,
   renderSpotlight = false,
   withFrame = true,
   frameColor = "#111111",
@@ -122,7 +122,7 @@ export default function Painting({
         </mesh>
       )}
 
-      <mesh castShadow>
+      <mesh>
         <planeGeometry args={[size.width, size.height]} />
         <meshStandardMaterial map={texture} />
       </mesh>
