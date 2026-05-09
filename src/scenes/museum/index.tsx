@@ -292,7 +292,10 @@ function MobilePanController({
   useFrame(() => {
     const controls = orbitRef.current;
     if (!controls) return;
-    controls.target.lerp(panTarget ?? _defaultOrbitTarget, 0.07);
+    const target = panTarget ?? _defaultOrbitTarget;
+    if (controls.target.distanceToSquared(target) < 0.00001) return;
+    if (panTarget) controls.object.position.sub(panTarget).normalize();
+    controls.target.lerp(target, 0.07);
     controls.update();
   });
   return null;
