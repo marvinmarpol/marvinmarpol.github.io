@@ -6,13 +6,92 @@ interface Props {
 export default function EntryOverlay({ onEnter, progress }: Props) {
   const loading = progress === 100 ? false : true;
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          background: "#000",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            width: 80,
+            height: 80,
+            marginBottom: 32,
+          }}
+        >
+          {[0, 0.65, 1.3].map((delay) => (
+            <div
+              key={delay}
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: "50%",
+                border: "1px solid #d0e60d",
+                animation: `pulse-ring 2s ease-out ${delay}s infinite`,
+              }}
+            />
+          ))}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#d0e60d",
+              fontSize: 18,
+              letterSpacing: "0.12em",
+            }}
+          >
+            MM
+          </div>
+        </div>
+        <div
+          style={{
+            width: 200,
+            height: 1,
+            background: "rgba(255,255,255,0.08)",
+            marginBottom: 14,
+          }}
+        >
+          <div
+            style={{
+              width: `${progress}%`,
+              height: "100%",
+              background: "#d0e60d",
+              transition: "width 0.4s ease",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            color: "#444",
+            fontSize: 11,
+            letterSpacing: "0.22em",
+          }}
+        >
+          LOADING...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
         position: "absolute",
         inset: 0,
         zIndex: 1,
-        background: "rgba(0,0,0,0.8)",
+        background: "rgba(0,0,0,0.85)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -35,8 +114,7 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
 
       <div
         style={{
-          color: "#f0f0f0",
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+          color: "#d0e60d",
           fontSize: "clamp(28px, 5vw, 56px)",
           letterSpacing: "0.12em",
           marginBottom: "10px",
@@ -48,7 +126,6 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       <div
         style={{
           color: "#777",
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           fontSize: "clamp(10px, 1.4vw, 13px)",
           letterSpacing: "0.22em",
           textTransform: "uppercase",
@@ -86,7 +163,6 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
             <div
               style={{
                 color: "#f0f0f0",
-                fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                 fontSize: "clamp(20px, 3.5vw, 30px)",
               }}
             >
@@ -95,7 +171,6 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
             <div
               style={{
                 color: "#555",
-                fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
                 fontSize: "10px",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
@@ -111,7 +186,6 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       <div
         style={{
           color: "#555",
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           fontSize: "12px",
           maxWidth: "340px",
           textAlign: "center",
@@ -127,46 +201,22 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       <div
         style={{
           color: "#3a3a3a",
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           fontSize: "11px",
           letterSpacing: "0.1em",
           marginBottom: "20px",
         }}
       >
-        WASD to move · mouse to look · X to view info
-      </div>
-
-      <div
-        style={{
-          width: "200px",
-          height: "1px",
-          background: "rgba(241, 130, 130, 0.07)",
-          marginBottom: "20px",
-          overflow: "hidden",
-          opacity: 1,
-          transition: "opacity 0.4s",
-          textAlign: "left",
-        }}
-      >
-        <div
-          style={{
-            height: "100%",
-            width: `${progress}%`,
-            background: "#555",
-            transition: "width .75s ease-out",
-          }}
-        />
+        WASD to move · mouse to look · X to visit page
       </div>
 
       <button
-        onClick={loading ? undefined : onEnter}
+        onClick={onEnter}
         disabled={loading}
         style={{
           padding: "12px 48px",
           background: "transparent",
           border: `1px solid ${loading ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.18)"}`,
           color: loading ? "#3a3a3a" : "#f0f0f0",
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           fontSize: "13px",
           letterSpacing: "0.2em",
           cursor: loading ? "default" : "pointer",

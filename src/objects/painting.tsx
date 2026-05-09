@@ -116,7 +116,7 @@ export default function Painting({
             ]}
           />
           <meshStandardMaterial
-            color={focusedRef.current ? "#FFF" : frameColor}
+            color={focusedRef.current ? "#d0e60d" : frameColor}
             roughness={0.5}
           />
         </mesh>

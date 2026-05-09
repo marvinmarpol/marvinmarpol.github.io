@@ -34,7 +34,6 @@ const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
 const PAINTING_Y = 2.6;
 
-
 const NS_COUNT = 5;
 const NS_SPACING = 5;
 const NS_START_X = -((NS_COUNT - 1) * NS_SPACING) / 2;
@@ -140,7 +139,12 @@ function Scene({
 }: SceneProps) {
   return (
     <>
-      <Floor position={[0, 0, 0]} size={[width, height]} color={"#aaaaaa"} />
+      <Floor
+        position={[0, 0, 0]}
+        size={[width, height]}
+        color={"#aaaaaa"}
+        /* tileTexture={{ path: "./textures/wood.jpeg", repeatX: 21, repeatY: 21 }} */
+      />
       <Room
         position={[0, 0, 0]}
         size={{ width, height, depth: 12 }}
@@ -449,6 +453,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           {activeInfo.title && (
             <div
               style={{
+                color: "#d0e60d",
                 fontSize: "15px",
                 fontWeight: "600",
                 marginBottom: "4px",
@@ -498,7 +503,15 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
               >
                 X
               </kbd>{" "}
-              to open link
+              to visit{" "}
+              <a
+                href={activeInfo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#d0e60d" }}
+              >
+                {activeInfo.href}
+              </a>
             </div>
           )}
           {isMobile && activeInfo.href && (
@@ -520,7 +533,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
                 letterSpacing: "0.04em",
               }}
             >
-              Open link ↗
+              Visit page ↗
             </a>
           )}
         </div>
@@ -576,6 +589,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
               minDistance={2}
               maxDistance={4}
               enableRotate={!panTarget}
+              reverseOrbit={true}
             />
             <MobilePanController orbitRef={orbitRef} panTarget={panTarget} />
           </>

@@ -119,3 +119,8 @@ code {
   height: 100vh;
   position: relative;
 }
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.55); opacity: 0.75; }
+  100% { transform: scale(2.6);  opacity: 0; }
+}
