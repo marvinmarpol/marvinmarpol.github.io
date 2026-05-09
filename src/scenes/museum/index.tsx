@@ -1,10 +1,11 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import {
   PointerLockControls,
   OrbitControls,
   useProgress,
+  Stats,
 } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
@@ -21,6 +22,8 @@ import {
   EAST_TEXTURES,
   NORTH_INFOS,
   NORTH_TEXTURES,
+  SOUTH_INFOS,
+  SOUTH_TEXTURES,
   WallLabel,
   WEST_INFOS,
   WEST_TEXTURES,
@@ -40,6 +43,10 @@ const NS_START_X = -((NS_COUNT - 1) * NS_SPACING) / 2;
 const EW_COUNT = 3;
 const EW_SPACING = 5;
 const EW_START_Z = -((EW_COUNT - 1) * EW_SPACING) / 2;
+
+const SS_COUNT = 3;
+const SS_SPACING = 5;
+const SS_START_X = -((SS_COUNT - 1) * SS_SPACING) / 2;
 
 const MY_HEIGHT = 1.78;
 
@@ -75,6 +82,7 @@ interface SceneProps {
   northInfos: PopupInfo[];
   westInfos: PopupInfo[];
   eastInfos: PopupInfo[];
+  southInfos: PopupInfo[];
   started: boolean;
   onMobileSelect?: (pos: Vector3) => void;
 }
@@ -89,6 +97,7 @@ function Scene({
   northInfos,
   westInfos,
   eastInfos,
+  southInfos,
   started,
   onMobileSelect,
 }: SceneProps) {
@@ -226,6 +235,42 @@ function Scene({
           <WallLabel>Specializations</WallLabel>
         </group>
       )}
+
+      {/* South wall — Socials */}
+      {Array.from({ length: SS_COUNT }, (_, i) => (
+        <Painting
+          key={`south-${i}`}
+          imageUrl={SOUTH_TEXTURES[i]}
+          frameColor="#1a1a2e"
+          position={[SS_START_X + i * SS_SPACING, PAINTING_Y, height / 2 - 0.02]}
+          rotation={[0, Math.PI, 0]}
+          size={{ width: PAINTING_WIDTH, height: PAINTING_HEIGHT }}
+          info={southInfos[i]}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onInfoClick={
+            isMobile
+              ? () => {
+                  onInfoClick(southInfos[i]);
+                  onMobileSelect?.(
+                    new Vector3(
+                      SS_START_X + i * SS_SPACING,
+                      PAINTING_Y,
+                      height / 2 - 0.02,
+                    ),
+                  );
+                }
+              : undefined
+          }
+          withSpotlight
+          withFrame
+        />
+      ))}
+      {started && (
+        <group position={[0, 4.2, height / 2 - 0.05]} rotation={[0, Math.PI, 0]}>
+          <WallLabel>Socials</WallLabel>
+        </group>
+      )}
     </>
   );
 }
@@ -266,6 +311,17 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
     setActiveInfo(info);
     setShowPopup(true);
   }, []);
+
+  useEffect(() => {
+    if (isMobile || !activeInfo?.href) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.code === "KeyX") {
+        window.open(activeInfo.href, "_blank", "noopener,noreferrer");
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [isMobile, activeInfo]);
 
   const handlePointerMissed = useCallback(() => {
     if (isMobile) {
@@ -369,6 +425,54 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
               {activeInfo.content}
             </div>
           )}
+          {!isMobile && activeInfo.href && (
+            <div
+              style={{
+                marginTop: "12px",
+                paddingTop: "10px",
+                borderTop: "1px solid rgba(255,255,255,0.07)",
+                fontSize: "11px",
+                color: "rgba(255,255,255,0.35)",
+                letterSpacing: "0.06em",
+              }}
+            >
+              Press{" "}
+              <kbd
+                style={{
+                  background: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  borderRadius: "3px",
+                  padding: "1px 5px",
+                  fontFamily: "inherit",
+                }}
+              >
+                X
+              </kbd>{" "}
+              to open link
+            </div>
+          )}
+          {isMobile && activeInfo.href && (
+            <a
+              href={activeInfo.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "block",
+                marginTop: "14px",
+                padding: "8px 14px",
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: "4px",
+                color: "#f0f0f0",
+                fontSize: "12px",
+                textAlign: "center",
+                textDecoration: "none",
+                letterSpacing: "0.04em",
+              }}
+            >
+              Open link ↗
+            </a>
+          )}
         </div>
       )}
 
@@ -400,6 +504,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           northInfos={NORTH_INFOS}
           westInfos={WEST_INFOS}
           eastInfos={EAST_INFOS}
+          southInfos={SOUTH_INFOS}
           started={started}
           onMobileSelect={isMobile ? setPanTarget : undefined}
         />
@@ -437,6 +542,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
             <PointerLockControls ref={pointerLockRef} />
           </>
         )}
+        <Stats/>
       </Canvas>
     </div>
   );

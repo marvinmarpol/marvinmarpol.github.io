@@ -6,6 +6,7 @@ export interface PopupInfo {
   title?: string;
   subtitle?: string;
   content?: React.ReactNode;
+  href?: string;
 }
 
 interface Props {

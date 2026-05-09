@@ -31,7 +31,10 @@
       "WebFetch(domain:www.instagram.com)",
       "WebFetch(domain:thinkingroominc.com)",
       "Bash(curl *)",
-      "Bash(identify /tmp/dattabot-raw.jpg /tmp/telkom-raw.jpg)"
+      "Bash(identify /tmp/dattabot-raw.jpg /tmp/telkom-raw.jpg)",
+      "Bash(cp /tmp/south-0.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-0.jpg)",
+      "Bash(cp /tmp/south-1.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-1.jpg)",
+      "Bash(cp /tmp/south-2.png /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/paintings/south-2.jpg)"
     ]
   }
 }

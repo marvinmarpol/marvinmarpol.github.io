@@ -36,13 +36,13 @@ export function WallLabel({ children }: { children: string }) {
   );
 }
 
-// North wall — Work Experience (company images)
+// North wall — Work Experience (company images, oldest → newest left to right)
 export const NORTH_TEXTURES = [
-  "./paintings/north-0.jpg",  // Krom Bank
-  "./paintings/north-1.webp", // Amarbank Technical Architect
-  "./paintings/north-2.webp", // Amarbank Backend Engineer
-  "./paintings/north-3.jpg",  // DattaBot
   "./paintings/north-4.jpg",  // Telkom Indonesia
+  "./paintings/north-3.jpg",  // DattaBot
+  "./paintings/north-2.webp", // Amarbank Backend Engineer
+  "./paintings/north-1.webp", // Amarbank Technical Architect
+  "./paintings/north-0.jpg",  // Krom Bank
 ];
 
 // West wall — Achievements (dark abstract)
@@ -59,63 +59,31 @@ export const  EAST_TEXTURES = [
   "./paintings/east-2.jpg",
 ];
 
-// North wall — Career Experience
+// North wall — Career Experience (oldest → newest left to right)
 export const  NORTH_INFOS: PopupInfo[] = [
   {
-    title: "Krom Bank Indonesia",
-    subtitle: "Lead Software Engineer · 2026 – Present",
+    title: "Telkom Indonesia",
+    subtitle: "Software Engineer · 2016 – 2017",
+    href: "https://www.telkom.co.id",
     content: (
       <>
         <InfoLine>
-          Leading fullstack development of internal banking tools at PT. Krom
-          Bank Indonesia, Tbk — Engineering Personal Account division.
+          Developed secure QR-code payment systems and mobile banking
+          integrations at Indonesia's state-owned telecommunications company.
         </InfoLine>
         <InfoBullet>
-          Designing scalable frontend &amp; backend architecture
+          +50% performance: PHP legacy → Java J2EE migration
         </InfoBullet>
-        <InfoBullet>Leading and mentoring engineering teams</InfoBullet>
-        <InfoBullet>Collaborating with product, design &amp; QA</InfoBullet>
-        <InfoBullet>Node.js · TypeScript · React · Angular · Vue.js</InfoBullet>
-      </>
-    ),
-  },
-  {
-    title: "Amarbank — Technical Architect",
-    subtitle: "Dec 2023 – Present",
-    content: (
-      <>
-        <InfoLine>
-          Defined system architecture, technical frameworks, and security
-          standards across engineering squads at Indonesia's digital bank.
-        </InfoLine>
-        <InfoBullet>+70% feature release accuracy via A/B testing</InfoBullet>
-        <InfoBullet>−40% regression via Codecept.js automation</InfoBullet>
-        <InfoBullet>100% PCI-DSS &amp; GDPR via anonymizer engine</InfoBullet>
-        <InfoBullet>Redux → Zustand migration completed in 3 months</InfoBullet>
-      </>
-    ),
-  },
-  {
-    title: "Amarbank — Backend Engineer",
-    subtitle: "Apr 2019 – Nov 2023 · Staff & Senior",
-    content: (
-      <>
-        <InfoLine>
-          Built and scaled core banking microservices in Golang. Mentored
-          engineers and owned backend reliability.
-        </InfoLine>
-        <InfoBullet>−50% deployment time: monolith → microservices</InfoBullet>
-        <InfoBullet>
-          −60% downtime via async event-driven architecture
-        </InfoBullet>
-        <InfoBullet>−70% duplicate storage via CQRS pattern</InfoBullet>
-        <InfoBullet>Mentored 7 engineers into senior promotions</InfoBullet>
+        <InfoBullet>ISO8583 mobile payment integration with Rintis</InfoBullet>
+        <InfoBullet>QR-code payment gateway design &amp; delivery</InfoBullet>
+        <InfoBullet>Java · J2EE · PHP · ISO8583</InfoBullet>
       </>
     ),
   },
   {
     title: "DattaBot",
     subtitle: "Senior Software Engineer · 2017 – 2019",
+    href: "https://dattabot.io",
     content: (
       <>
         <InfoLine>
@@ -134,20 +102,57 @@ export const  NORTH_INFOS: PopupInfo[] = [
     ),
   },
   {
-    title: "Telkom Indonesia",
-    subtitle: "Software Engineer · 2016 – 2017",
+    title: "Amarbank — Backend Engineer",
+    subtitle: "Apr 2019 – Nov 2023 · Staff & Senior",
+    href: "https://www.amarbank.co.id",
     content: (
       <>
         <InfoLine>
-          Developed secure QR-code payment systems and mobile banking
-          integrations at Indonesia's state-owned telecommunications company.
+          Built and scaled core banking microservices in Golang. Mentored
+          engineers and owned backend reliability.
+        </InfoLine>
+        <InfoBullet>−50% deployment time: monolith → microservices</InfoBullet>
+        <InfoBullet>
+          −60% downtime via async event-driven architecture
+        </InfoBullet>
+        <InfoBullet>−70% duplicate storage via CQRS pattern</InfoBullet>
+        <InfoBullet>Mentored 7 engineers into senior promotions</InfoBullet>
+      </>
+    ),
+  },
+  {
+    title: "Amarbank — Technical Architect",
+    subtitle: "Dec 2023 – Present",
+    href: "https://www.amarbank.co.id",
+    content: (
+      <>
+        <InfoLine>
+          Defined system architecture, technical frameworks, and security
+          standards across engineering squads at Indonesia's digital bank.
+        </InfoLine>
+        <InfoBullet>+70% feature release accuracy via A/B testing</InfoBullet>
+        <InfoBullet>−40% regression via Codecept.js automation</InfoBullet>
+        <InfoBullet>100% PCI-DSS &amp; GDPR via anonymizer engine</InfoBullet>
+        <InfoBullet>Redux → Zustand migration completed in 3 months</InfoBullet>
+      </>
+    ),
+  },
+  {
+    title: "Krom Bank Indonesia",
+    subtitle: "Lead Software Engineer · 2026 – Present",
+    href: "https://www.krom.id",
+    content: (
+      <>
+        <InfoLine>
+          Leading fullstack development of internal banking tools at PT. Krom
+          Bank Indonesia, Tbk — Engineering Personal Account division.
         </InfoLine>
         <InfoBullet>
-          +50% performance: PHP legacy → Java J2EE migration
+          Designing scalable frontend &amp; backend architecture
         </InfoBullet>
-        <InfoBullet>ISO8583 mobile payment integration with Rintis</InfoBullet>
-        <InfoBullet>QR-code payment gateway design &amp; delivery</InfoBullet>
-        <InfoBullet>Java · J2EE · PHP · ISO8583</InfoBullet>
+        <InfoBullet>Leading and mentoring engineering teams</InfoBullet>
+        <InfoBullet>Collaborating with product, design &amp; QA</InfoBullet>
+        <InfoBullet>Node.js · TypeScript · React · Angular · Vue.js</InfoBullet>
       </>
     ),
   },
@@ -262,5 +267,33 @@ export const  EAST_INFOS: PopupInfo[] = [
         <InfoBullet>PostgreSQL · MongoDB · Redis · Elasticsearch</InfoBullet>
       </>
     ),
+  },
+];
+
+// South wall — Socials
+export const SOUTH_TEXTURES = [
+  "./paintings/south-0.jpg", // TikTok
+  "./paintings/south-1.jpg", // djrekord.com
+  "./paintings/south-2.jpg", // Instagram
+];
+
+export const SOUTH_INFOS: PopupInfo[] = [
+  {
+    title: "TikTok",
+    subtitle: "@rhythmixchell",
+    href: "https://www.tiktok.com/@rhythmixchell",
+    content: <InfoLine>Short-form music &amp; DJ content.</InfoLine>,
+  },
+  {
+    title: "djrekord.com",
+    subtitle: "Personal music site",
+    href: "https://djrekord.com",
+    content: <InfoLine>DJ sets, mixes, and music releases.</InfoLine>,
+  },
+  {
+    title: "Instagram",
+    subtitle: "@marvin_mitchell92",
+    href: "https://www.instagram.com/marvin_mitchell92",
+    content: <InfoLine>Photos, reels, and behind-the-scenes content.</InfoLine>,
   },
 ];
