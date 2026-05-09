@@ -43,6 +43,7 @@ export default function Painting({
   const lightRef = useRef<any>(null);
   const targetRef = useRef<any>(null);
   const frameThickness = 0.06;
+  const frameDepth = 0.06;
   const texture = useTexture(imageUrl);
   const focusedRef = useRef(false);
 
@@ -108,21 +109,24 @@ export default function Painting({
       }
     >
       {withFrame && (
-        <mesh position={[0, 0, -0.012]}>
-          <planeGeometry
+        <mesh position={[0, 0, -frameDepth / 2]}>
+          <boxGeometry
             args={[
               size.width + frameThickness * 2,
               size.height + frameThickness * 2,
+              frameDepth,
             ]}
           />
           <meshStandardMaterial
             color={focusedRef.current ? "#d0e60d" : frameColor}
-            roughness={0.5}
+            roughness={0.55}
+            metalness={0.1}
           />
         </mesh>
       )}
 
-      <mesh>
+      {/* Canvas covers the front face of the frame box */}
+      <mesh position={[0, 0, 0.001]}>
         <planeGeometry args={[size.width, size.height]} />
         <meshStandardMaterial map={texture} />
       </mesh>
