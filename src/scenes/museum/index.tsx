@@ -1,22 +1,22 @@
+import { useState, useCallback, useRef, type ReactNode } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Vector3 } from "three";
 import {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  type ReactNode,
-} from "react";
-import { Canvas } from "@react-three/fiber";
-import { PointerLockControls, OrbitControls, Html } from "@react-three/drei";
+  PointerLockControls,
+  OrbitControls,
+  Html,
+  useProgress,
+} from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
-import FPSCamera from "../cameras/FPSCamera";
-import Room from "../objects/room";
-import Floor from "../objects/floor";
-import Painting from "../objects/painting";
-import LightBulb from "../lighting/LightBulb";
-import EntryOverlay from "../overlay/EntryOverlay";
-import useIsMobile from "../hooks/useIsMobile";
-import { type PopupInfo } from "../objects/Focusable";
+import FPSCamera from "../../cameras/FPSCamera";
+import Room from "../../objects/room";
+import Floor from "../../objects/floor";
+import Painting from "../../objects/painting";
+import LightBulb from "../../lighting/LightBulb";
+import EntryOverlay from "../../overlay/EntryOverlay";
+import useIsMobile from "../../hooks/useIsMobile";
+import { type PopupInfo } from "../../objects/Focusable";
 
 const PAINTING_WIDTH = 1.2;
 const PAINTING_HEIGHT = 1.6;
@@ -30,10 +30,12 @@ const NS_SPACING = 5;
 const NS_START_X = -((NS_COUNT - 1) * NS_SPACING) / 2;
 
 const EW_COUNT = 3;
-const EW_SPACING = 4;
+const EW_SPACING = 5;
 const EW_START_Z = -((EW_COUNT - 1) * EW_SPACING) / 2;
 
 const MY_HEIGHT = 1.78;
+
+const UI_FONT = "var(--sans)";
 
 function InfoLine({ children }: { children: ReactNode }) {
   return <p style={{ margin: "0 0 8px 0", lineHeight: "1.55" }}>{children}</p>;
@@ -51,7 +53,7 @@ function WallLabel({ children }: { children: string }) {
       <span
         style={{
           color: "rgba(255,255,255,0.45)",
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+          fontFamily: UI_FONT,
           fontSize: "11px",
           fontWeight: 500,
           letterSpacing: "0.28em",
@@ -278,6 +280,24 @@ const EAST_INFOS: PopupInfo[] = [
   },
 ];
 
+const _defaultOrbitTarget = new Vector3(0, MY_HEIGHT, 0);
+
+function MobilePanController({
+  orbitRef,
+  panTarget,
+}: {
+  orbitRef: { current: any };
+  panTarget: Vector3 | null;
+}) {
+  useFrame(() => {
+    const controls = orbitRef.current;
+    if (!controls) return;
+    controls.target.lerp(panTarget ?? _defaultOrbitTarget, 0.07);
+    controls.update();
+  });
+  return null;
+}
+
 interface SceneProps {
   width: number;
   height: number;
@@ -290,6 +310,7 @@ interface SceneProps {
   westInfos: PopupInfo[];
   eastInfos: PopupInfo[];
   started: boolean;
+  onMobileSelect?: (pos: Vector3) => void;
 }
 
 function Scene({
@@ -303,6 +324,7 @@ function Scene({
   westInfos,
   eastInfos,
   started,
+  onMobileSelect,
 }: SceneProps) {
   return (
     <>
@@ -333,7 +355,20 @@ function Scene({
           info={northInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
-          onInfoClick={isMobile ? () => onInfoClick(northInfos[i]) : undefined}
+          onInfoClick={
+            isMobile
+              ? () => {
+                  onInfoClick(northInfos[i]);
+                  onMobileSelect?.(
+                    new Vector3(
+                      NS_START_X + i * NS_SPACING,
+                      PAINTING_Y,
+                      -height / 2 + 0.02,
+                    ),
+                  );
+                }
+              : undefined
+          }
           withSpotlight
           withFrame
         />
@@ -356,7 +391,20 @@ function Scene({
           info={westInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
-          onInfoClick={isMobile ? () => onInfoClick(westInfos[i]) : undefined}
+          onInfoClick={
+            isMobile
+              ? () => {
+                  onInfoClick(westInfos[i]);
+                  onMobileSelect?.(
+                    new Vector3(
+                      width / 2 - 0.02,
+                      PAINTING_Y,
+                      EW_START_Z + i * EW_SPACING,
+                    ),
+                  );
+                }
+              : undefined
+          }
           withSpotlight
           withFrame
         />
@@ -386,7 +434,20 @@ function Scene({
           info={eastInfos[i]}
           onFocus={onFocus}
           onBlur={onBlur}
-          onInfoClick={isMobile ? () => onInfoClick(eastInfos[i]) : undefined}
+          onInfoClick={
+            isMobile
+              ? () => {
+                  onInfoClick(eastInfos[i]);
+                  onMobileSelect?.(
+                    new Vector3(
+                      -width / 2 + 0.02,
+                      PAINTING_Y,
+                      EW_START_Z + i * EW_SPACING,
+                    ),
+                  );
+                }
+              : undefined
+          }
           withSpotlight
           withFrame
         />
@@ -413,21 +474,26 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
   const cameraPosition = { x: 0, y: MY_HEIGHT, z: height / 3 };
   const isMobile = useIsMobile();
 
+  const { progress: loadingProgress } = useProgress();
   const [started, setStarted] = useState(false);
   const [activeInfo, setActiveInfo] = useState<PopupInfo | null>(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [panTarget, setPanTarget] = useState<Vector3 | null>(null);
   const activeInfoRef = useRef<PopupInfo | null>(null);
   const pointerLockRef = useRef<any>(null);
+  const orbitRef = useRef<any>(null);
 
   const handleFocus = useCallback((info: PopupInfo) => {
     activeInfoRef.current = info;
     setActiveInfo(info);
+    setShowPopup(true);
   }, []);
 
   const handleBlur = useCallback(() => {
     activeInfoRef.current = null;
     setActiveInfo(null);
     setShowPopup(false);
+    setPanTarget(null);
   }, []);
 
   const handleInfoClick = useCallback((info: PopupInfo) => {
@@ -439,16 +505,8 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
     if (isMobile) {
       setShowPopup(false);
       setActiveInfo(null);
+      setPanTarget(null);
     }
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "KeyX" && activeInfoRef.current) setShowPopup((v) => !v);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
   }, [isMobile]);
 
   const handleEnter = useCallback(() => {
@@ -461,8 +519,10 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
 
   return (
     <div id="canvas-container">
-      {!started && <EntryOverlay onEnter={handleEnter} />}
-      {!isMobile && (
+      {!started && (
+        <EntryOverlay onEnter={handleEnter} progress={loadingProgress} />
+      )}
+      {!isMobile && started && (
         <div
           style={{
             position: "fixed",
@@ -510,7 +570,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
             borderRadius: "4px",
             padding: "18px 22px",
             color: "#f0f0f0",
-            fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+            fontFamily: UI_FONT,
             maxWidth: "380px",
             zIndex: 10,
           }}
@@ -547,32 +607,13 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
         </div>
       )}
 
-      {!isMobile && activeInfo && !showPopup && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: "40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            color: "rgba(255, 255, 255, 1)",
-            fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
-            fontSize: "55px",
-            pointerEvents: "none",
-            zIndex: 10,
-            WebkitTextStroke: "1.5px black",
-          }}
-        >
-          Press <strong>X</strong> to view info
-        </div>
-      )}
-
       <Canvas
         shadows
         gl={{ toneMappingExposure: 2.2 }}
         camera={{ fov: 75 }}
         onPointerMissed={handlePointerMissed}
       >
-        <fog attach="fog" args={["#555555", depth, height]} />
+        <fog attach="fog" args={["#555555", depth, Math.max(width, height)]} />
         <ambientLight intensity={0.4} />
 
         <LightBulb
@@ -595,6 +636,7 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
           westInfos={WEST_INFOS}
           eastInfos={EAST_INFOS}
           started={started}
+          onMobileSelect={isMobile ? setPanTarget : undefined}
         />
 
         <EffectComposer>
@@ -606,13 +648,17 @@ export default function Museum({ width = 22, height = 16, depth = 12 }: Props) {
         </EffectComposer>
 
         {isMobile ? (
-          <OrbitControls
-            target={[0, cameraPosition.y, 0]}
-            maxPolarAngle={Math.PI / 2 - 0.1}
-            minPolarAngle={Math.PI / 2 - 0.5}
-            minDistance={2}
-            maxDistance={20}
-          />
+          <>
+            <OrbitControls
+              ref={orbitRef}
+              target={[0, cameraPosition.y, 0]}
+              maxPolarAngle={Math.PI / 2 - 0.1}
+              minPolarAngle={Math.PI / 2 - 0.5}
+              minDistance={2}
+              maxDistance={5}
+            />
+            <MobilePanController orbitRef={orbitRef} panTarget={panTarget} />
+          </>
         ) : (
           <>
             <FPSCamera

@@ -16,7 +16,12 @@
       "Bash(curl -sL \"https://storage.googleapis.com/amarbank-new/prod/image/9943a403fb525c810814b9c9a32c03842051283e_1756289001.webp\" -o public/paintings/north-2.webp)",
       "Bash(curl -sL \"https://images.unsplash.com/photo-1626908013351-800ddd734b8a?w=480&h=640&fit=crop&q=85&fm=jpg\" -o public/paintings/west-0.jpg)",
       "Bash(curl -sL \"https://images.unsplash.com/photo-1616243850909-f010afe8de3a?w=480&h=640&fit=crop&q=85&fm=jpg\" -o public/paintings/west-1.jpg)",
-      "Bash(curl -sL \"https://images.unsplash.com/photo-1628258334105-2a0b3d6efee1?w=480&h=640&fit=crop&q=85&fm=jpg\" -o public/paintings/east-2.jpg)"
+      "Bash(curl -sL \"https://images.unsplash.com/photo-1628258334105-2a0b3d6efee1?w=480&h=640&fit=crop&q=85&fm=jpg\" -o public/paintings/east-2.jpg)",
+      "Bash(curl -L --progress-bar -o /tmp/inter-font.zip \"https://github.com/rsms/inter/releases/download/v4.0/Inter-4.0.zip\")",
+      "Bash(unzip -o inter-font.zip \"*.woff2\" -d inter-extracted)",
+      "Read(//tmp/**)",
+      "Bash(cp /tmp/inter-extracted/web/InterVariable.woff2 /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/fonts/)",
+      "Bash(cp /tmp/inter-extracted/web/InterVariable-Italic.woff2 /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/fonts/)"
     ]
   }
 }

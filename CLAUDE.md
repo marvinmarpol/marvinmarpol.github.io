@@ -40,3 +40,5 @@ This is a **3D interactive museum/portfolio** built with React Three Fiber (R3F)
 - Three.js via `@react-three/fiber` and `@react-three/drei`
 - Post-processing via `@react-three/postprocessing`
 - Vite 8 for dev/build, `gh-pages` for deployment
+
+claude --resume 81569b94-f318-410e-bd8e-bd5debbfcbcc

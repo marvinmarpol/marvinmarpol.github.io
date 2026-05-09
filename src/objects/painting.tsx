@@ -3,8 +3,6 @@ import { useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
-export type { PopupInfo } from "./Focusable";
-
 import type { PopupInfo } from "./Focusable";
 
 interface Props {
@@ -13,6 +11,7 @@ interface Props {
   size?: { width: number; height: number };
   imageUrl: string;
   withSpotlight?: boolean;
+  renderSpotlight?: boolean;
   withFrame?: boolean;
   frameColor?: string;
   info?: PopupInfo;
@@ -31,6 +30,7 @@ export default function Painting({
   size = { width: 1, height: 1 },
   imageUrl,
   withSpotlight = true,
+  renderSpotlight = false,
   withFrame = true,
   frameColor = "#111111",
   info,
@@ -115,7 +115,10 @@ export default function Painting({
               size.height + frameThickness * 2,
             ]}
           />
-          <meshStandardMaterial color={frameColor} roughness={0.5} />
+          <meshStandardMaterial
+            color={focusedRef.current ? "#FFF" : frameColor}
+            roughness={0.5}
+          />
         </mesh>
       )}
 
@@ -126,8 +129,8 @@ export default function Painting({
 
       <mesh ref={targetRef} position={[0, 0, 0]} />
 
-      {/* {withSpotlight && (
-        <mesh position={[0, 2.25, 2.5]} rotation={[Math.PI / 4, 0, 0]}>
+      {withSpotlight && renderSpotlight && (
+        <mesh position={[0, 3, 2.5]} rotation={[Math.PI / 4, 0, 0]}>
           <cylinderGeometry args={[0.04, 0.06, 0.28, 8]} />
           <meshStandardMaterial
             color="#555555"
@@ -135,7 +138,7 @@ export default function Painting({
             metalness={0.7}
           />
         </mesh>
-      )} */}
+      )}
 
       {withSpotlight && (
         <spotLight
