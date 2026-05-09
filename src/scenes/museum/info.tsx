@@ -66,9 +66,9 @@ export const WEST_TEXTURES = [
 
 // East wall — Specializations (tech/code)
 export const EAST_TEXTURES = [
-  "./paintings/east-0.jpg",
-  "./paintings/east-1.jpg",
-  "./paintings/east-2.jpg",
+  "./paintings/east-0.svg",
+  "./paintings/east-1.svg",
+  "./paintings/east-2.svg",
 ];
 
 // North wall — Career Experience (oldest → newest left to right)

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="riseA" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%"   stop-color="#d0e60d" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#d0e60d" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="riseB" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%"   stop-color="#d0e60d" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#d0e60d" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="800" fill="#090909"/>
+
+  <!-- Faint radial grid lines from leader node -->
+  <g stroke="#d0e60d" stroke-width="0.4" opacity="0.06">
+    <line x1="300" y1="148" x2="100" y2="320"/>
+    <line x1="300" y1="148" x2="200" y2="320"/>
+    <line x1="300" y1="148" x2="300" y2="320"/>
+    <line x1="300" y1="148" x2="400" y2="320"/>
+    <line x1="300" y1="148" x2="500" y2="320"/>
+    <line x1="300" y1="148" x2="80"  y2="460"/>
+    <line x1="300" y1="148" x2="520" y2="460"/>
+  </g>
+
+  <!-- ── Leader node ── -->
+  <circle cx="300" cy="130" r="38" fill="none" stroke="#d0e60d" stroke-width="1.2" opacity="0.7"/>
+  <circle cx="300" cy="130" r="28" fill="#111"  stroke="#d0e60d" stroke-width="0.6" opacity="0.4"/>
+  <circle cx="300" cy="130" r="6"  fill="#d0e60d" opacity="0.75"/>
+  <text x="300" y="186" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.5"
+        letter-spacing="2">LEAD</text>
+
+  <!-- Connection lines: leader → tier-1 -->
+  <line x1="276" y1="152" x2="145" y2="308" stroke="#d0e60d" stroke-width="0.8" opacity="0.28"/>
+  <line x1="292" y1="167" x2="295" y2="308" stroke="#d0e60d" stroke-width="0.8" opacity="0.28"/>
+  <line x1="322" y1="154" x2="455" y2="308" stroke="#d0e60d" stroke-width="0.8" opacity="0.28"/>
+
+  <!-- ── Tier-1: senior engineers (3 nodes) ── -->
+  <circle cx="145" cy="328" r="26" fill="none" stroke="#d0e60d" stroke-width="1" opacity="0.6"/>
+  <circle cx="145" cy="328" r="5"  fill="#d0e60d" opacity="0.6"/>
+  <text x="145" y="367" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.4"
+        letter-spacing="1.5">SENIOR</text>
+
+  <circle cx="300" cy="328" r="26" fill="none" stroke="#d0e60d" stroke-width="1" opacity="0.6"/>
+  <circle cx="300" cy="328" r="5"  fill="#d0e60d" opacity="0.6"/>
+  <text x="300" y="367" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.4"
+        letter-spacing="1.5">SENIOR</text>
+
+  <circle cx="455" cy="328" r="26" fill="none" stroke="#d0e60d" stroke-width="1" opacity="0.6"/>
+  <circle cx="455" cy="328" r="5"  fill="#d0e60d" opacity="0.6"/>
+  <text x="455" y="367" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.4"
+        letter-spacing="1.5">SENIOR</text>
+
+  <!-- Connection lines: tier-1 → tier-2 -->
+  <line x1="128" y1="352" x2="82"  y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+  <line x1="155" y1="353" x2="192" y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+  <line x1="286" y1="354" x2="192" y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+  <line x1="300" y1="354" x2="300" y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+  <line x1="314" y1="354" x2="408" y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+  <line x1="440" y1="353" x2="408" y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+  <line x1="468" y1="352" x2="518" y2="458" stroke="#d0e60d" stroke-width="0.7" opacity="0.22"/>
+
+  <!-- ── Tier-2: 7 mentored engineers ── -->
+  <!-- 7 nodes across the bottom two rows -->
+  <!-- Row A: 4 nodes -->
+  <g opacity="0.85">
+    <circle cx="82"  cy="476" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.55"/>
+    <circle cx="82"  cy="476" r="4"  fill="#d0e60d" opacity="0.45"/>
+
+    <circle cx="192" cy="476" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.55"/>
+    <circle cx="192" cy="476" r="4"  fill="#d0e60d" opacity="0.45"/>
+
+    <circle cx="300" cy="476" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.55"/>
+    <circle cx="300" cy="476" r="4"  fill="#d0e60d" opacity="0.45"/>
+
+    <circle cx="408" cy="476" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.55"/>
+    <circle cx="408" cy="476" r="4"  fill="#d0e60d" opacity="0.45"/>
+
+    <circle cx="518" cy="476" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.55"/>
+    <circle cx="518" cy="476" r="4"  fill="#d0e60d" opacity="0.45"/>
+  </g>
+
+  <!-- Row B: 2 more nodes -->
+  <circle cx="137" cy="550" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.45"/>
+  <circle cx="137" cy="550" r="4"  fill="#d0e60d" opacity="0.35"/>
+  <circle cx="463" cy="550" r="18" fill="none" stroke="#d0e60d" stroke-width="0.85" opacity="0.45"/>
+  <circle cx="463" cy="550" r="4"  fill="#d0e60d" opacity="0.35"/>
+
+  <!-- Growth arrows (↑) above tier-2 nodes -->
+  <g fill="#d0e60d" opacity="0.35" font-family="'Courier New', Courier, monospace" font-size="10" text-anchor="middle">
+    <text x="82"  y="454">↑</text>
+    <text x="192" y="454">↑</text>
+    <text x="300" y="454">↑</text>
+    <text x="408" y="454">↑</text>
+    <text x="518" y="454">↑</text>
+    <text x="137" y="528">↑</text>
+    <text x="463" y="528">↑</text>
+  </g>
+
+  <!-- Vertical progress lines (career growth) -->
+  <line x1="82"  y1="580" x2="82"  y2="630" stroke="url(#riseA)" stroke-width="1.5"/>
+  <line x1="192" y1="580" x2="192" y2="630" stroke="url(#riseA)" stroke-width="1.5"/>
+  <line x1="300" y1="580" x2="300" y2="630" stroke="url(#riseA)" stroke-width="1.5"/>
+  <line x1="408" y1="580" x2="408" y2="630" stroke="url(#riseA)" stroke-width="1.5"/>
+  <line x1="518" y1="580" x2="518" y2="630" stroke="url(#riseA)" stroke-width="1.5"/>
+  <line x1="137" y1="580" x2="137" y2="630" stroke="url(#riseB)" stroke-width="1.5"/>
+  <line x1="463" y1="580" x2="463" y2="630" stroke="url(#riseB)" stroke-width="1.5"/>
+
+  <!-- Tier labels -->
+  <text x="578" y="134" text-anchor="end"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.28" letter-spacing="1">LEAD</text>
+  <text x="578" y="332" text-anchor="end"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.22" letter-spacing="1">SENIOR</text>
+  <text x="578" y="480" text-anchor="end"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.18" letter-spacing="1">ENG</text>
+
+  <!-- Horizontal tier rules -->
+  <line x1="44" y1="200" x2="556" y2="200" stroke="#d0e60d" stroke-width="0.4" opacity="0.08"/>
+  <line x1="44" y1="390" x2="556" y2="390" stroke="#d0e60d" stroke-width="0.4" opacity="0.08"/>
+  <line x1="44" y1="520" x2="556" y2="520" stroke="#d0e60d" stroke-width="0.4" opacity="0.06"/>
+
+  <!-- Metric -->
+  <line x1="44" y1="678" x2="556" y2="678" stroke="#d0e60d" stroke-width="0.5" opacity="0.12"/>
+  <text x="300" y="706" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="22" fill="#d0e60d" opacity="0.82">×7</text>
+  <text x="300" y="724" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.3"
+        letter-spacing="2.5">SENIOR PROMOTIONS</text>
+
+  <!-- Corner tag -->
+  <text x="28" y="786"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.18"
+        letter-spacing="3">TECH LEADERSHIP</text>
+</svg>

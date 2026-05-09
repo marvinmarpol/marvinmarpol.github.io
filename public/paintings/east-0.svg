@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <!-- Background -->
+  <rect width="600" height="800" fill="#090909"/>
+
+  <!-- Faint grid -->
+  <g stroke="#ffffff" stroke-width="0.5" opacity="0.025">
+    <line x1="0"   y1="200" x2="600" y2="200"/>
+    <line x1="0"   y1="400" x2="600" y2="400"/>
+    <line x1="0"   y1="600" x2="600" y2="600"/>
+    <line x1="150" y1="0"   x2="150" y2="800"/>
+    <line x1="300" y1="0"   x2="300" y2="800"/>
+    <line x1="450" y1="0"   x2="450" y2="800"/>
+  </g>
+
+  <!-- Layer label: API Gateway -->
+  <text x="300" y="72" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.35" letter-spacing="4">API GATEWAY</text>
+  <!-- Gateway nodes (entry points) -->
+  <rect x="110" y="82" width="90" height="32" rx="3"
+        fill="none" stroke="#d0e60d" stroke-width="0.9" stroke-opacity="0.55"/>
+  <text x="155" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9" fill="#d0e60d" opacity="0.7">REST</text>
+
+  <rect x="255" y="82" width="90" height="32" rx="3"
+        fill="none" stroke="#d0e60d" stroke-width="0.9" stroke-opacity="0.55"/>
+  <text x="300" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9" fill="#d0e60d" opacity="0.7">gRPC</text>
+
+  <rect x="400" y="82" width="90" height="32" rx="3"
+        fill="none" stroke="#d0e60d" stroke-width="0.9" stroke-opacity="0.55"/>
+  <text x="445" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9" fill="#d0e60d" opacity="0.7">Events</text>
+
+  <!-- Lines down from gateway to service mesh -->
+  <line x1="155" y1="114" x2="130" y2="200" stroke="#d0e60d" stroke-width="0.7" opacity="0.25"/>
+  <line x1="155" y1="114" x2="300" y2="200" stroke="#d0e60d" stroke-width="0.7" opacity="0.18"/>
+  <line x1="300" y1="114" x2="300" y2="200" stroke="#d0e60d" stroke-width="0.7" opacity="0.25"/>
+  <line x1="445" y1="114" x2="470" y2="200" stroke="#d0e60d" stroke-width="0.7" opacity="0.25"/>
+  <line x1="445" y1="114" x2="300" y2="200" stroke="#d0e60d" stroke-width="0.7" opacity="0.18"/>
+
+  <!-- Layer label: Service Mesh -->
+  <text x="300" y="192" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.28" letter-spacing="4">SERVICE MESH</text>
+
+  <!-- Event bus (horizontal dashed line) -->
+  <line x1="60" y1="320" x2="540" y2="320"
+        stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="6,5"/>
+  <text x="560" y="324" font-family="'Courier New', Courier, monospace"
+        font-size="7" fill="#d0e60d" opacity="0.3">BUS</text>
+
+  <!-- Service boxes -->
+  <rect x="50"  y="208" width="100" height="36" rx="2"
+        fill="#111" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.45"/>
+  <text x="100" y="231" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8.5" fill="#d0e60d" opacity="0.65">auth-svc</text>
+
+  <rect x="190" y="208" width="100" height="36" rx="2"
+        fill="#111" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.45"/>
+  <text x="240" y="231" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8.5" fill="#d0e60d" opacity="0.65">tx-svc</text>
+
+  <rect x="330" y="208" width="100" height="36" rx="2"
+        fill="#111" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.45"/>
+  <text x="380" y="231" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8.5" fill="#d0e60d" opacity="0.65">notif-svc</text>
+
+  <rect x="460" y="208" width="100" height="36" rx="2"
+        fill="#111" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.45"/>
+  <text x="510" y="231" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8.5" fill="#d0e60d" opacity="0.65">audit-svc</text>
+
+  <!-- Lines from services down to event bus -->
+  <line x1="100" y1="244" x2="100" y2="320" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+  <line x1="240" y1="244" x2="240" y2="320" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+  <line x1="380" y1="244" x2="380" y2="320" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+  <line x1="510" y1="244" x2="510" y2="320" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+
+  <!-- Lambda/serverless nodes -->
+  <text x="300" y="368" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.28" letter-spacing="4">SERVERLESS · AWS LAMBDA</text>
+
+  <circle cx="150" cy="410" r="22" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+  <text x="150" y="415" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.55">λ</text>
+
+  <circle cx="300" cy="410" r="22" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+  <text x="300" y="415" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.55">λ</text>
+
+  <circle cx="450" cy="410" r="22" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="3,3"/>
+  <text x="450" y="415" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.55">λ</text>
+
+  <!-- Lines down to data layer -->
+  <line x1="150" y1="432" x2="120" y2="508" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+  <line x1="300" y1="432" x2="300" y2="508" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+  <line x1="450" y1="432" x2="480" y2="508" stroke="#d0e60d" stroke-width="0.6" opacity="0.2"/>
+
+  <!-- Data layer label -->
+  <text x="300" y="500" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.28" letter-spacing="4">DATA LAYER</text>
+
+  <!-- Database cylinders (simplified as stacked rects) -->
+  <ellipse cx="120" cy="522" rx="38" ry="9" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <rect x="82" y="522" width="76" height="36" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <ellipse cx="120" cy="558" rx="38" ry="9" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <text x="120" y="544" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.5">Postgres</text>
+
+  <ellipse cx="300" cy="522" rx="38" ry="9" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <rect x="262" y="522" width="76" height="36" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <ellipse cx="300" cy="558" rx="38" ry="9" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <text x="300" y="544" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.5">Redis</text>
+
+  <ellipse cx="480" cy="522" rx="38" ry="9" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <rect x="442" y="522" width="76" height="36" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <ellipse cx="480" cy="558" rx="38" ry="9" fill="none" stroke="#d0e60d" stroke-width="0.8" stroke-opacity="0.4"/>
+  <text x="480" y="544" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.5">Mongo</text>
+
+  <!-- Compliance badges -->
+  <text x="300" y="618" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.28" letter-spacing="4">COMPLIANCE</text>
+
+  <rect x="62"  y="628" width="72" height="20" rx="2"
+        fill="none" stroke="#d0e60d" stroke-width="0.6" stroke-opacity="0.35"/>
+  <text x="98" y="642" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.45">PCI-DSS</text>
+
+  <rect x="152" y="628" width="72" height="20" rx="2"
+        fill="none" stroke="#d0e60d" stroke-width="0.6" stroke-opacity="0.35"/>
+  <text x="188" y="642" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.45">GDPR</text>
+
+  <rect x="242" y="628" width="90" height="20" rx="2"
+        fill="none" stroke="#d0e60d" stroke-width="0.6" stroke-opacity="0.35"/>
+  <text x="287" y="642" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.45">ISO8583</text>
+
+  <rect x="350" y="628" width="90" height="20" rx="2"
+        fill="none" stroke="#d0e60d" stroke-width="0.6" stroke-opacity="0.35"/>
+  <text x="395" y="642" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.45">Solidity</text>
+
+  <rect x="458" y="628" width="80" height="20" rx="2"
+        fill="none" stroke="#d0e60d" stroke-width="0.6" stroke-opacity="0.35"/>
+  <text x="498" y="642" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="7.5" fill="#d0e60d" opacity="0.45">CQRS</text>
+
+  <!-- Bottom rule + tag -->
+  <line x1="44" y1="688" x2="556" y2="688" stroke="#d0e60d" stroke-width="0.5" opacity="0.12"/>
+  <text x="300" y="712" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="11" fill="#d0e60d" opacity="0.6"
+        letter-spacing="1">SYSTEM ARCHITECTURE</text>
+
+  <text x="28" y="786"
+        font-family="'Courier New', Courier, monospace"
+        font-size="8" fill="#d0e60d" opacity="0.18"
+        letter-spacing="3">SYS ARCH · DISTRIBUTED</text>
+</svg>
