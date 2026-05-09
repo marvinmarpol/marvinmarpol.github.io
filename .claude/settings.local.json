@@ -21,7 +21,17 @@
       "Bash(unzip -o inter-font.zip \"*.woff2\" -d inter-extracted)",
       "Read(//tmp/**)",
       "Bash(cp /tmp/inter-extracted/web/InterVariable.woff2 /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/fonts/)",
-      "Bash(cp /tmp/inter-extracted/web/InterVariable-Italic.woff2 /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/fonts/)"
+      "Bash(cp /tmp/inter-extracted/web/InterVariable-Italic.woff2 /Users/marvin.mitchell/react-projects/marvinmarpol.github.io/public/fonts/)",
+      "WebFetch(domain:logowik.com)",
+      "WebFetch(domain:cdnlogo.com)",
+      "WebFetch(domain:favpng.com)",
+      "WebFetch(domain:vectorseek.com)",
+      "WebFetch(domain:zonalogo.com)",
+      "WebFetch(domain:www.liblogo.com)",
+      "WebFetch(domain:www.instagram.com)",
+      "WebFetch(domain:thinkingroominc.com)",
+      "Bash(curl *)",
+      "Bash(identify /tmp/dattabot-raw.jpg /tmp/telkom-raw.jpg)"
     ]
   }
 }
