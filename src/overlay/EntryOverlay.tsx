@@ -103,6 +103,8 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
           marginBottom: "10px",
         }}
       >
+        <div style={{ width: "28px", flexShrink: 0 }} />
+
         <div
           style={{
             color: "#d0e60d",
