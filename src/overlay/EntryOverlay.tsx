@@ -97,13 +97,52 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
 
       <div
         style={{
-          color: "#d0e60d",
-          fontSize: "clamp(28px, 5vw, 56px)",
-          letterSpacing: "0.12em",
+          display: "flex",
+          alignItems: "center",
+          gap: "16px",
           marginBottom: "10px",
         }}
       >
-        MARVIN MITCHELL
+        <div
+          style={{
+            color: "#d0e60d",
+            fontSize: "clamp(28px, 5vw, 56px)",
+            letterSpacing: "0.12em",
+          }}
+        >
+          MARVIN MITCHELL
+        </div>
+
+        <a
+          href="./marvin_mitchell_cv.pdf"
+          download="Marvin_Mitchell_CV.pdf"
+          title="Download CV"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "28px",
+            height: "28px",
+            border: "1px solid #333",
+            color: "#555",
+            fontSize: "14px",
+            textDecoration: "none",
+            flexShrink: 0,
+            transition: "color 0.2s, border-color 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            const el = e.target as HTMLAnchorElement;
+            el.style.color = "#d0e60d";
+            el.style.borderColor = "#d0e60d";
+          }}
+          onMouseLeave={(e) => {
+            const el = e.target as HTMLAnchorElement;
+            el.style.color = "#555";
+            el.style.borderColor = "#333";
+          }}
+        >
+          ↓
+        </a>
       </div>
 
       <div
@@ -218,6 +257,8 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       >
         {loading ? `LOADING...` : "ENTER"}
       </button>
+
+
     </div>
   );
 }
