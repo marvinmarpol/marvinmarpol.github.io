@@ -1,3 +1,5 @@
+import useIsMobile from "../hooks/useIsMobile";
+
 interface Props {
   onEnter: () => void;
   progress: number;
@@ -5,6 +7,42 @@ interface Props {
 
 export default function EntryOverlay({ onEnter, progress }: Props) {
   const loading = progress === 100 ? false : true;
+  const isMobile = useIsMobile()
+
+  const renderDownloadButton = () => {
+    return (
+      <a
+        href="./marvin_mitchell_cv.pdf"
+        download="Marvin_Mitchell_CV.pdf"
+        title="Download CV"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "28px",
+          height: "28px",
+          border: "1px solid #333",
+          color: "#555",
+          fontSize: "14px",
+          textDecoration: "none",
+          flexShrink: 0,
+          transition: "color 0.2s, border-color 0.2s",
+        }}
+        onMouseEnter={(e) => {
+          const el = e.target as HTMLAnchorElement;
+          el.style.color = "#d0e60d";
+          el.style.borderColor = "#d0e60d";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.target as HTMLAnchorElement;
+          el.style.color = "#555";
+          el.style.borderColor = "#333";
+        }}
+      >
+        ↓
+      </a>
+    );
+  };
 
   if (loading) {
     return (
@@ -62,7 +100,8 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
             fontSize: 11,
             letterSpacing: "0.22em",
           }}
-        >Loading {progress}%
+        >
+          Loading {progress}%
         </div>
       </div>
     );
@@ -115,36 +154,7 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
           MARVIN MITCHELL
         </div>
 
-        <a
-          href="./marvin_mitchell_cv.pdf"
-          download="Marvin_Mitchell_CV.pdf"
-          title="Download CV"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "28px",
-            height: "28px",
-            border: "1px solid #333",
-            color: "#555",
-            fontSize: "14px",
-            textDecoration: "none",
-            flexShrink: 0,
-            transition: "color 0.2s, border-color 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            const el = e.target as HTMLAnchorElement;
-            el.style.color = "#d0e60d";
-            el.style.borderColor = "#d0e60d";
-          }}
-          onMouseLeave={(e) => {
-            const el = e.target as HTMLAnchorElement;
-            el.style.color = "#555";
-            el.style.borderColor = "#333";
-          }}
-        >
-          ↓
-        </a>
+        {!isMobile && renderDownloadButton()}
       </div>
 
       <div
@@ -153,6 +163,7 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
           fontSize: "clamp(10px, 1.4vw, 13px)",
           letterSpacing: "0.22em",
           textTransform: "uppercase",
+          textAlign: "center",
           marginBottom: "36px",
         }}
       >
@@ -259,8 +270,6 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       >
         {loading ? `LOADING...` : "ENTER"}
       </button>
-
-
     </div>
   );
 }
