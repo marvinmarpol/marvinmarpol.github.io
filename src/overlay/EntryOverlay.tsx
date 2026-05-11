@@ -7,7 +7,7 @@ interface Props {
 
 export default function EntryOverlay({ onEnter, progress }: Props) {
   const loading = progress === 100 ? false : true;
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
 
   const renderDownloadButton = () => {
     return (
@@ -137,12 +137,13 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
       <div
         style={{
           display: "flex",
+          flexWrap: "wrap",
           alignItems: "center",
           gap: "16px",
           marginBottom: "10px",
         }}
       >
-        <div style={{ width: "28px", flexShrink: 0 }} />
+        {!isMobile && <div style={{ width: "28px", flexShrink: 0 }} />}
 
         <div
           style={{
@@ -154,7 +155,7 @@ export default function EntryOverlay({ onEnter, progress }: Props) {
           MARVIN MITCHELL
         </div>
 
-        {!isMobile && renderDownloadButton()}
+        {renderDownloadButton()}
       </div>
 
       <div
